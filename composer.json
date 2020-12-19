@@ -1,0 +1,22 @@
+{
+    "name": "biiiiiigmonster/laravel-mixin",
+    "description": "Laravel framework mixin",
+    "type": "library",
+    "keywords": ["laravel", "orm", "relation", "whereHas"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "moyou",
+            "email": "603707288@qq.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "BiiiiiigMonster\\LaravelMixin\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "laravel/framework": "^7.0"
+    }
+}
