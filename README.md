@@ -11,7 +11,7 @@
 
 </div>
 
-`Laravel wherehasin`是一个可以提升`Laravel ORM`关联关系查询性能的扩展包，可以替代`Laravel ORM`中的`whereHas`以及`whereHasMorphIn`查询方法。
+`hasin(hasMorphIn)`是一个基于`where in`语法实现的`Laravel ORM`关联关系查询的扩展包，部分场景下可以替代`Laravel ORM`中的`has(hasMorphIn)`更高的性能。
 
 
 ## 环境
