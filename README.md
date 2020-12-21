@@ -73,7 +73,7 @@ $products = Product::has('skus')->paginate(10);
 $products = Product::hasIn('skus')->paginate(10);
 ```
 
-> `Laravel ORM`十种关联关系详细案例sql输出可查看<a href="https://note.youdao.com/noteshare?id=882bfd7ccdf1370c55326a33333c6f62" target="_blank">有道云笔记</a>
+> `Laravel ORM`十种关联关系详细案例sql输出可查看[有道云笔记](https://note.youdao.com/noteshare?id=882bfd7ccdf1370c55326a33333c6f62){:target="_blank"}
 
 ### 使用
 
