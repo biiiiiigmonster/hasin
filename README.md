@@ -76,56 +76,58 @@ whereHasIn 0.027166843414307 秒
 
 ### 使用
 
-#### whereHasIn
+此扩展`hasIn(hasMorphIn)`支持`Laravel ORM`中的所有关联关系，入参及使用方式与`has(hasMorph)`完全一致，可安全替换
 
-此方法已支持`Laravel ORM`中的所有关联关系，可以替代`whereHas`
+> hasIn
 
 ```php
-User::whereHasIn('profile')->get();
+// hasIn
+Product::hasIn('skus')->get();
 
-User::whereHasIn('profile', function ($q) {
-    $q->where('id', '>', 10);
+// orHasIn
+Product::where('name', 'like', '%可乐%')->orHasIn('skus')->get();
+
+// notHasIn
+Product::notHasIn('skus')->get();
+
+// orNotHasIn
+Product::where('name', 'like', '%可乐%')->orNotHasIn('skus')->get();
+```
+
+> whereHasIn
+
+```php
+// whereHasIn
+Product::whereHasIn('skus', function ($query) {
+    $query->where('sales', '>', 10);
+})->get();
+
+// orWhereHasIn
+Product::where('name', 'like', '%可乐%')->orWhereHasIn('skus', function ($query) {
+    $query->where('sales', '>', 10);
+})->get();
+
+// notWhereHasIn
+Product::orWhereHasIn('skus', function ($query) {
+    $query->where('sales', '>', 10);
+})->get();
+
+// orNotWhereHasIn
+Product::where('name', 'like', '%可乐%')->orNotWhereHasIn('skus', function ($query) {
+    $query->where('sales', '>', 10);
 })->get();
 ```
 
-orWhereHasIn
+嵌套关联
 
 ```php
-User::where('name', 'like', '%laravel%')->orWhereHasIn('profile')->get();
+Product::hasIn('attrs.values')->get();
 ```
 
-多级关联关系
-```php
-User::whereHasIn('painters.paintings', function ($q) {
-    $q->whereIn('id', [600, 601]);
-})->orderBy('id')->get()->toArray();
-
-```
-
-需要注意的是，如果是`BelongsTo`类型的关联关系，使用`whereHasIn`时使用的不是主键，而是外键
+> hasMorphIn
 
 ```php
-<?php
-
-/**
- * 这里用的是"user_id in"，而不是"id in"
- * 
- * select * from `test_user_profiles` where `test_user_profiles`.`user_id` in 
- *   (
- *     select `test_users`.`id` from `test_users` where `test_user_profiles`.`user_id` = `test_users`.`id`
- *   )
- */
-$profiles = Profile::whereHasIn('user')->get();
-```
-
-#### whereHasMorphIn
-
-此方法已支持`Laravel ORM`中的所有关联关系，可以替代`whereHasMorph`
-
-```php
-Image::whereHasMorphIn('imageable', Post::class, function ($q) {
-    $q->where('id', '>', 10);
-})->get();
+Image::hasMorphIn('imageable', [Product::class, Brand::class])->get();
 ```
 
 ## License
