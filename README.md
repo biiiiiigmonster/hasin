@@ -131,4 +131,4 @@ Product::hasIn('attrs.values')->get();
 ```
 
 ## License
-[The MIT License (MIT)](LICENSE).
+[MIT 协议](LICENSE).
