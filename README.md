@@ -130,5 +130,8 @@ Image::hasMorphIn('imageable', [Product::class, Brand::class])->get();
 Product::hasIn('attrs.values')->get();
 ```
 
+## 联系交流
+wx：biiiiiigmonster(备注：hasin)
+
 ## License
 [MIT 协议](LICENSE).
