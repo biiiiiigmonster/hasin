@@ -85,13 +85,13 @@ whereHasIn 0.027166843414307 秒
 Product::hasIn('skus')->get();
 
 // orHasIn
-Product::where('name', 'like', '%可乐%')->orHasIn('skus')->get();
+Product::where('name', 'like', '%拌饭酱%')->orHasIn('skus')->get();
 
-// notHasIn
-Product::notHasIn('skus')->get();
+// doesntHaveIn
+Product::doesntHaveIn('skus')->get();
 
-// orNotHasIn
-Product::where('name', 'like', '%可乐%')->orNotHasIn('skus')->get();
+// orDoesntHaveIn
+Product::where('name', 'like', '%拌饭酱%')->orDoesntHaveIn('skus')->get();
 ```
 
 > whereHasIn
@@ -103,17 +103,17 @@ Product::whereHasIn('skus', function ($query) {
 })->get();
 
 // orWhereHasIn
-Product::where('name', 'like', '%可乐%')->orWhereHasIn('skus', function ($query) {
+Product::where('name', 'like', '%拌饭酱%')->orWhereHasIn('skus', function ($query) {
     $query->where('sales', '>', 10);
 })->get();
 
-// notWhereHasIn
-Product::orWhereHasIn('skus', function ($query) {
+// whereDoesntHaveIn
+Product::whereDoesntHaveIn('skus', function ($query) {
     $query->where('sales', '>', 10);
 })->get();
 
-// orNotWhereHasIn
-Product::where('name', 'like', '%可乐%')->orNotWhereHasIn('skus', function ($query) {
+// orWhereDoesntHaveIn
+Product::where('name', 'like', '%拌饭酱%')->orWhereDoesntHaveIn('skus', function ($query) {
     $query->where('sales', '>', 10);
 })->get();
 ```
