@@ -25,53 +25,11 @@ class RelationMixin
          * @return \Illuminate\Database\Eloquent\Builder
          */
         return function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder{
-            $belongsTo = function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder{
-                /** @var BelongsTo $this */
-                $columns = $columns == ['*'] ? $query->qualifyColumn($this->ownerKey) : $columns;
-                if ($parentQuery->getQuery()->from == $query->getQuery()->from) {
-                    return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
-                }
-
-                return $query->select($columns);
-            };
-            $hasManyThrough = function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder{
-                /** @var HasManyThrough $this */
-                $columns = $columns == ['*'] ? $this->getQualifiedFirstKeyName() : $columns;
-                if ($parentQuery->getQuery()->from === $query->getQuery()->from) {
-                    return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
-                }
-
-                if ($parentQuery->getQuery()->from === $this->throughParent->getTable()) {
-                    return $this->getRelationExistenceQueryForThroughSelfRelation($query, $parentQuery, $columns);
-                }
-
-                $this->performJoin($query);
-
-                return $query->select($columns);
-            };
-
+            // Abstract Relation
             $relation = function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder{
                 /** @var Relation $this */
                 $columns = $columns == ['*'] ? $this->getExistenceCompareKey() : $columns;
                 return $query->select($columns);
-            };
-            $belongsToMany = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($relation): Builder{
-                /** @var BelongsToMany $this */
-                $columns = $columns == ['*'] ? $this->getExistenceCompareKey() : $columns;// getExistenceCompareKey借用Exists 语法用到的id
-                if ($parentQuery->getQuery()->from == $query->getQuery()->from) {
-                    return $this->getRelationExistenceQueryForSelfJoin($query, $parentQuery, $columns);
-                }
-
-                $this->performJoin($query);
-
-                return $relation($query, $parentQuery, $columns);
-            };
-            $morphToMany = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($belongsToMany): Builder{
-                /** @var MorphToMany $this */
-                $columns = $columns == ['*'] ? $this->getExistenceCompareKey() : $columns;// getExistenceCompareKey借用Exists 语法用到的id
-                return $belongsToMany($query, $parentQuery, $columns)->where(
-                    $this->table.'.'.$this->morphType, $this->morphClass
-                );
             };
             $hasOneOrMany = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($relation): Builder{
                 /** @var HasOneOrMany $this */
@@ -89,6 +47,78 @@ class RelationMixin
                     $query->qualifyColumn($this->getMorphType()), $this->morphClass
                 );
             };
+            // Entity Relation
+            // BelongsTo (extend Relation, overload)
+            $belongsTo = function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder{
+                /** @var BelongsTo $this */
+                $columns = $columns == ['*'] ? $query->qualifyColumn($this->ownerKey) : $columns;
+                if ($parentQuery->getQuery()->from == $query->getQuery()->from) {
+                    return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
+                }
+
+                return $query->select($columns);
+            };
+            // BelongsToMany (extend Relation, iteration)
+            $belongsToMany = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($relation): Builder{
+                /** @var BelongsToMany $this */
+                $columns = $columns == ['*'] ? $this->getExistenceCompareKey() : $columns;// getExistenceCompareKey借用Exists 语法用到的id
+                if ($parentQuery->getQuery()->from == $query->getQuery()->from) {
+                    return $this->getRelationExistenceQueryForSelfJoin($query, $parentQuery, $columns);
+                }
+
+                $this->performJoin($query);
+
+                return $relation($query, $parentQuery, $columns);
+            };
+            // HasMany (extend HasOneOrMany, inherit)
+            $hasMany = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($hasOneOrMany): Builder{
+                return $hasOneOrMany($query, $parentQuery, $columns);
+            };
+            // HasManyThrough (extend Relation, overload)
+            $hasManyThrough = function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder{
+                /** @var HasManyThrough $this */
+                $columns = $columns == ['*'] ? $this->getQualifiedFirstKeyName() : $columns;
+                if ($parentQuery->getQuery()->from === $query->getQuery()->from) {
+                    return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
+                }
+
+                if ($parentQuery->getQuery()->from === $this->throughParent->getTable()) {
+                    return $this->getRelationExistenceQueryForThroughSelfRelation($query, $parentQuery, $columns);
+                }
+
+                $this->performJoin($query);
+
+                return $query->select($columns);
+            };
+            // HasOne (extend HasOneOrMany, inherit)
+            $hasOne = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($hasOneOrMany): Builder{
+                return $hasOneOrMany($query, $parentQuery, $columns);
+            };
+            // HasOneThrough (extend HasManyThrough, inherit)
+            $hasOneThrough = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($hasManyThrough): Builder{
+                return $hasManyThrough($query, $parentQuery, $columns);
+            };
+            // MorphMany (extend MorphOneOrMany, inherit)
+            $morphMany = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($morphOneOrMany): Builder{
+                return $morphOneOrMany($query, $parentQuery, $columns);
+            };
+            // MorphOne (extend MorphOneOrMany, inherit)
+            $morphOne = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($morphOneOrMany): Builder{
+                return $morphOneOrMany($query, $parentQuery, $columns);
+            };
+            // MorphTo (extend BelongsTo, inherit)
+            $morphTo = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($belongsTo): Builder{
+                return $belongsTo($query, $parentQuery, $columns);
+            };
+            // MorphToMany (extend BelongsToMany, iteration)
+            $morphToMany = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($belongsToMany): Builder{
+                /** @var MorphToMany $this */
+                $columns = $columns == ['*'] ? $this->getExistenceCompareKey() : $columns;// getExistenceCompareKey借用Exists 语法用到的id
+                return $belongsToMany($query, $parentQuery, $columns)->where(
+                    $this->table.'.'.$this->morphType, $this->morphClass
+                );
+            };
+            /* After all the above code is abbreviated, you can clearly see the inheritance relationship, which perfectly fits the inheritance structure of the original framework */
 
             /**
              * 上面的这些方法本应该是期望存在各个类中
@@ -103,32 +133,16 @@ class RelationMixin
              * 这一套实现我愿称之为最强！！！
              */
             $relationName = (string)Str::of(get_class($this))->afterLast('\\')->camel();
-            $function = ${$relationName}??$relation;//默认的继承关系为Relation基类
-            return $function($query,$parentQuery,$columns);
+            return ${$relationName}($query,$parentQuery,$columns);
         };
     }
 
     public function getRelationWhereInKey(): Closure
     {
         return function (): string{
-            $belongsTo = function (): string{
-                /** @var BelongsTo $this */
-                return $this->getQualifiedForeignKeyName();
-            };
-            $hasManyThrough = function (): string{
-                /** @var HasManyThrough $this */
-                return $this->getQualifiedLocalKeyName();
-            };
-
             $relation = function (): string{
                 /** @var Relation $this */
                 return $this->getQualifiedParentKeyName();
-            };
-            $belongsToMany = function ()use($relation): string{
-                return $relation();
-            };
-            $morphToMany = function ()use($belongsToMany): string{
-                return $belongsToMany();
             };
             $hasOneOrMany = function ()use($relation): string{
                 return $relation();
@@ -137,9 +151,41 @@ class RelationMixin
                 return $hasOneOrMany();
             };
 
+            $belongsTo = function (): string{
+                /** @var BelongsTo $this */
+                return $this->getQualifiedForeignKeyName();
+            };
+            $belongsToMany = function ()use($relation): string{
+                return $relation();
+            };
+            $hasMany = function ()use($hasOneOrMany): string{
+                return $hasOneOrMany();
+            };
+            $hasManyThrough = function (): string{
+                /** @var HasManyThrough $this */
+                return $this->getQualifiedLocalKeyName();
+            };
+            $hasOne = function ()use($hasOneOrMany): string{
+                return $hasOneOrMany();
+            };
+            $hasOneThrough = function ()use($hasManyThrough): string{
+                return $hasManyThrough();
+            };
+            $morphMany = function ()use($morphOneOrMany): string{
+                return $morphOneOrMany();
+            };
+            $morphOne = function ()use($morphOneOrMany): string{
+                return $morphOneOrMany();
+            };
+            $morphTo = function ()use($belongsTo): string{
+                return $belongsTo();
+            };
+            $morphToMany = function ()use($belongsToMany): string{
+                return $belongsToMany();
+            };
+
             $relationName = (string)Str::of(get_class($this))->afterLast('\\')->camel();
-            $function = ${$relationName}??$relation;
-            return $function();
+            return ${$relationName}();
         };
     }
 }

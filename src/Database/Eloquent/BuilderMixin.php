@@ -8,23 +8,9 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 
 class BuilderMixin
 {
-//    public function whereBetweenHas(): Closure{}
-//    public function orWhereBetweenHas(): Closure{}
-//    public function whereNotBetweenHas(): Closure{}
-//    public function orWhereNotBetweenHas(): Closure{}
-//
-//    public function whereInHas(): Closure{}
-//    public function orWhereInHas(): Closure{}
-//    public function whereNotInHas(): Closure{}
-//    public function orWhereNotInHas(): Closure{}
-//
-//    public function whereNullHas(): Closure{}
-//    public function orWhereNullHas(): Closure{}
-//    public function whereNotNullHas(): Closure{}
-//    public function orWhereNotNullHas(): Closure{}
-
     /**
-     * 仿造框架提供where in实现，全部流程与where exists一致
+     * Add a relationship count / whereIn condition to the query.
+     *
      * @return Closure
      */
     public function hasIn(): Closure
@@ -46,7 +32,7 @@ class BuilderMixin
             // If we only need to check for the existence of the relation, then we can optimize
             // the subquery to only run a "where in" clause instead of this full "count"
             // clause. This will make these queries run much faster compared with a count.
-            $method = $this->canUseInForExistenceCheck($operator, $count)
+            $method = $this->canUseExistsForExistenceCheck($operator, $count)
                 ? 'getRelationInQuery'
                 : 'getRelationExistenceCountQuery';
 
@@ -66,113 +52,14 @@ class BuilderMixin
             );
         };
     }
-    public function orHasIn(): Closure
-    {
-        return function ($relation, $operator = '>=', $count = 1): Builder{
-            /** @var Builder $this */
-            return $this->hasIn($relation, $operator, $count, 'or');
-        };
-    }
-    public function doesntHaveIn(): Closure
-    {
-        return function ($relation, $boolean = 'and', Closure $callback = null): Builder{
-            /** @var Builder $this */
-            return $this->hasIn($relation, '<', 1, $boolean, $callback);
-        };
-    }
-    public function orDoesntHaveIn(): Closure
-    {
-        return function ($relation): Builder{
-            /** @var Builder $this */
-            return $this->doesntHaveIn($relation,'or');
-        };
-    }
-    public function whereHasIn(): Closure
-    {
-        return function ($relation, Closure $callback = null, $operator = '>=', $count = 1): Builder{
-            /** @var Builder $this */
-            return $this->hasIn($relation, $operator, $count, 'and', $callback);
-        };
-    }
-    public function orWhereHasIn(): Closure{
-        return function ($relation, Closure $callback = null, $operator = '>=', $count = 1): Builder{
-            /** @var Builder $this */
-            return $this->hasIn($relation, $operator, $count, 'or', $callback);
-        };
-    }
-    public function whereDoesntHaveIn(): Closure
-    {
-        return function ($relation, Closure $callback = null): Builder{
-            /** @var Builder $this */
-            return $this->doesntHaveIn($relation, 'and', $callback);
-        };
-    }
-    public function orWhereDoesntHaveIn(): Closure
-    {
-        return function ($relation, Closure $callback = null): Builder{
-            /** @var Builder $this */
-            return $this->doesntHaveIn($relation, 'or', $callback);
-        };
-    }
 
-    public function hasMorphIn(): Closure
-    {
-        return function (): Builder{
-            /** @var Builder $this */
-            // to do
-            return $this;
-        };
-    }
-    public function orHasMorphIn(): Closure
-    {
-        return function ($relation, $types, $operator = '>=', $count = 1): Builder{
-            /** @var Builder $this */
-            return $this->hasMorphIn($relation, $types, $operator, $count, 'or');
-        };
-    }
-    public function doesntHaveMorphIn(): Closure
-    {
-        return function ($relation, $types, $boolean = 'and', Closure $callback = null): Builder{
-            /** @var Builder $this */
-            return $this->hasMorphIn($relation, $types, '<', 1, $boolean, $callback);
-        };
-    }
-    public function orDoesntHaveMorphIn(): Closure
-    {
-        return function ($relation, $types): Builder{
-            /** @var Builder $this */
-            return $this->doesntHaveMorphIn($relation, $types, 'or');
-        };
-    }
-    public function whereHasMorphIn(): Closure
-    {
-        return function ($relation, $types, Closure $callback = null, $operator = '>=', $count = 1): Builder{
-            /** @var Builder $this */
-            return $this->hasMorphIn($relation, $types, $operator, $count, 'and', $callback);
-        };
-    }
-    public function orWhereHasMorphIn(): Closure
-    {
-        return function ($relation, $types, Closure $callback = null, $operator = '>=', $count = 1): Builder{
-            /** @var Builder $this */
-            return $this->hasMorphIn($relation, $types, $operator, $count, 'or', $callback);
-        };
-    }
-    public function whereDoesntHaveMorphIn(): Closure
-    {
-        return function ($relation, $types, Closure $callback = null): Builder{
-            /** @var Builder $this */
-            return $this->doesntHaveMorphIn($relation, $types, 'and', $callback);
-        };
-    }
-    public function orWhereDoesntHaveMorphIn(): Closure
-    {
-        return function ($relation, $types, Closure $callback = null): Builder{
-            /** @var Builder $this */
-            return $this->doesntHaveMorphIn($relation, $types, 'or', $callback);
-        };
-    }
-
+    /**
+     * Add nested relationship count / whereIn conditions to the query.
+     *
+     * Sets up recursive call to whereHas until we finish the nested relation.
+     *
+     * @return Closure
+     */
     protected function hasInNested(): Closure
     {
         return function ($relations, $operator = '>=', $count = 1, $boolean = 'and', $callback = null): Builder{
@@ -198,32 +85,242 @@ class BuilderMixin
             return $this->hasIn(array_shift($relations), $doesntHave ? '<' : '>=', 1, $boolean, $closure);
         };
     }
-    protected function canUseInForExistenceCheck(): Closure
+
+    /**
+     * Add a relationship count / whereIn condition to the query with an "or".
+     *
+     * @return Closure
+     */
+    public function orHasIn(): Closure
     {
-        /**
-         * @param  $operator
-         * @param  $count
-         * @return bool
-         */
-        return function ($operator, $count): bool{
-            return ($operator === '>=' || $operator === '<') && $count === 1;
+        return function ($relation, $operator = '>=', $count = 1): Builder{
+            /** @var Builder $this */
+            return $this->hasIn($relation, $operator, $count, 'or');
         };
     }
+
+    /**
+     * Add a relationship count / whereIn condition to the query.
+     *
+     * @return Closure
+     */
+    public function doesntHaveIn(): Closure
+    {
+        return function ($relation, $boolean = 'and', Closure $callback = null): Builder{
+            /** @var Builder $this */
+            return $this->hasIn($relation, '<', 1, $boolean, $callback);
+        };
+    }
+
+    /**
+     * Add a relationship count / whereIn condition to the query with an "or".
+     *
+     * @return Closure
+     */
+    public function orDoesntHaveIn(): Closure
+    {
+        return function ($relation): Builder{
+            /** @var Builder $this */
+            return $this->doesntHaveIn($relation,'or');
+        };
+    }
+
+    /**
+     * Add a relationship count / whereIn condition to the query with where clauses.
+     *
+     * @return Closure
+     */
+    public function whereHasIn(): Closure
+    {
+        return function ($relation, Closure $callback = null, $operator = '>=', $count = 1): Builder{
+            /** @var Builder $this */
+            return $this->hasIn($relation, $operator, $count, 'and', $callback);
+        };
+    }
+
+    /**
+     * Add a relationship count / whereIn condition to the query with where clauses and an "or".
+     *
+     * @return Closure
+     */
+    public function orWhereHasIn(): Closure{
+        return function ($relation, Closure $callback = null, $operator = '>=', $count = 1): Builder{
+            /** @var Builder $this */
+            return $this->hasIn($relation, $operator, $count, 'or', $callback);
+        };
+    }
+
+    /**
+     * Add a relationship count / whereIn condition to the query with where clauses.
+     *
+     * @return Closure
+     */
+    public function whereDoesntHaveIn(): Closure
+    {
+        return function ($relation, Closure $callback = null): Builder{
+            /** @var Builder $this */
+            return $this->doesntHaveIn($relation, 'and', $callback);
+        };
+    }
+
+    /**
+     * Add a relationship count / whereIn condition to the query with where clauses and an "or".
+     *
+     * @return Closure
+     */
+    public function orWhereDoesntHaveIn(): Closure
+    {
+        return function ($relation, Closure $callback = null): Builder{
+            /** @var Builder $this */
+            return $this->doesntHaveIn($relation, 'or', $callback);
+        };
+    }
+
+    /**
+     * Add a polymorphic relationship count / whereIn condition to the query.
+     *
+     * @return Closure
+     */
+    public function hasMorphIn(): Closure
+    {
+        return function ($relation, $types, $operator = '>=', $count = 1, $boolean = 'and', Closure $callback = null): Builder{
+            /** @var Builder $this */
+            $relation = $this->getRelationWithoutConstraints($relation);
+
+            $types = (array) $types;
+
+            if ($types === ['*']) {
+                $types = $this->model->newModelQuery()->distinct()->pluck($relation->getMorphType())->filter()->all();
+            }
+
+            foreach ($types as &$type) {
+                $type = Relation::getMorphedModel($type) ?? $type;
+            }
+
+            return $this->where(function ($query) use ($relation, $callback, $operator, $count, $types) {
+                foreach ($types as $type) {
+                    $query->orWhere(function ($query) use ($relation, $callback, $operator, $count, $type) {
+                        $belongsTo = $this->getBelongsToRelation($relation, $type);
+
+                        if ($callback) {
+                            $callback = function ($query) use ($callback, $type) {
+                                return $callback($query, $type);
+                            };
+                        }
+
+                        $query->where($this->query->from.'.'.$relation->getMorphType(), '=', (new $type)->getMorphClass())
+                            ->whereHasIn($belongsTo, $callback, $operator, $count);
+                    });
+                }
+            }, null, null, $boolean);
+        };
+    }
+
+    /**
+     * Add a polymorphic relationship count / whereIn condition to the query with an "or".
+     *
+     * @return Closure
+     */
+    public function orHasMorphIn(): Closure
+    {
+        return function ($relation, $types, $operator = '>=', $count = 1): Builder{
+            /** @var Builder $this */
+            return $this->hasMorphIn($relation, $types, $operator, $count, 'or');
+        };
+    }
+
+    /**
+     * Add a polymorphic relationship count / whereIn condition to the query.
+     *
+     * @return Closure
+     */
+    public function doesntHaveMorphIn(): Closure
+    {
+        return function ($relation, $types, $boolean = 'and', Closure $callback = null): Builder{
+            /** @var Builder $this */
+            return $this->hasMorphIn($relation, $types, '<', 1, $boolean, $callback);
+        };
+    }
+
+    /**
+     * Add a polymorphic relationship count / whereIn condition to the query with an "or".
+     *
+     * @return Closure
+     */
+    public function orDoesntHaveMorphIn(): Closure
+    {
+        return function ($relation, $types): Builder{
+            /** @var Builder $this */
+            return $this->doesntHaveMorphIn($relation, $types, 'or');
+        };
+    }
+
+    /**
+     * Add a polymorphic relationship count / whereIn condition to the query with where clauses.
+     *
+     * @return Closure
+     */
+    public function whereHasMorphIn(): Closure
+    {
+        return function ($relation, $types, Closure $callback = null, $operator = '>=', $count = 1): Builder{
+            /** @var Builder $this */
+            return $this->hasMorphIn($relation, $types, $operator, $count, 'and', $callback);
+        };
+    }
+
+    /**
+     * Add a polymorphic relationship count / whereIn condition to the query with where clauses and an "or".
+     *
+     * @return Closure
+     */
+    public function orWhereHasMorphIn(): Closure
+    {
+        return function ($relation, $types, Closure $callback = null, $operator = '>=', $count = 1): Builder{
+            /** @var Builder $this */
+            return $this->hasMorphIn($relation, $types, $operator, $count, 'or', $callback);
+        };
+    }
+
+    /**
+     * Add a polymorphic relationship count / whereIn condition to the query with where clauses.
+     *
+     * @return Closure
+     */
+    public function whereDoesntHaveMorphIn(): Closure
+    {
+        return function ($relation, $types, Closure $callback = null): Builder{
+            /** @var Builder $this */
+            return $this->doesntHaveMorphIn($relation, $types, 'and', $callback);
+        };
+    }
+
+    /**
+     * Add a polymorphic relationship count / whereIn condition to the query with where clauses and an "or".
+     *
+     * @return Closure
+     */
+    public function orWhereDoesntHaveMorphIn(): Closure
+    {
+        return function ($relation, $types, Closure $callback = null): Builder{
+            /** @var Builder $this */
+            return $this->doesntHaveMorphIn($relation, $types, 'or', $callback);
+        };
+    }
+
+    /**
+     * Add the "has" condition whereIn clause to the query.
+     *
+     * @return Closure
+     */
     protected function addHasInWhere(): Closure
     {
         return function (Builder $hasInQuery, Relation $relation, $operator, $count, $boolean): Builder{
             /** @var Builder $this */
             $hasInQuery->mergeConstraintsFrom($relation->getQuery());
 
-            return $this->canUseInForExistenceCheck($operator, $count)
+            return $this->canUseExistsForExistenceCheck($operator, $count)
                 ? $this->whereIn($relation->getRelationWhereInKey(), $hasInQuery->toBase(), $boolean, $operator === '<' && $count === 1)
                 : $this->addWhereCountQuery($hasInQuery->toBase(), $operator, $count, $boolean);
         };
     }
-
-//    public function withCount(): Closure{}
-//    public function withMax(): Closure{}
-//    public function withMin(): Closure{}
-//    public function withSum(): Closure{}
-//    public function withAvg(): Closure{}
 }
