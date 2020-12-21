@@ -1,8 +1,8 @@
 <?php
 namespace BiiiiiigMonster\Hasin;
 
-use BiiiiiigMonster\LaravelMixin\Database\Eloquent\BuilderMixin;
-use BiiiiiigMonster\LaravelMixin\Database\Eloquent\RelationMixin;
+use BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin;
+use BiiiiiigMonster\Hasin\Database\Eloquent\RelationMixin;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
