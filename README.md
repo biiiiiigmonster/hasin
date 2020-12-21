@@ -66,7 +66,7 @@ $users1 = User::whereHas('profile')->limit(10)->get();
 $users1 = User::whereHasIn('profile')->limit(10)->get();
 ```
 
-> 详细方法案例可查看[有道云笔记](https://note.youdao.com/noteshare?id=882bfd7ccdf1370c55326a33333c6f62)
+> 详细案例sql输出可查看[有道云笔记](https://note.youdao.com/noteshare?id=882bfd7ccdf1370c55326a33333c6f62)
 
 ### 使用
 
