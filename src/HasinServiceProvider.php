@@ -1,5 +1,5 @@
 <?php
-namespace BiiiiiigMonster\LaravelMixin;
+namespace BiiiiiigMonster\Hasin;
 
 use BiiiiiigMonster\LaravelMixin\Database\Eloquent\BuilderMixin;
 use BiiiiiigMonster\LaravelMixin\Database\Eloquent\RelationMixin;
@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
-class LaravelMixinServiceProvider extends ServiceProvider
+class HasinServiceProvider extends ServiceProvider
 {
     public function register()
     {

@@ -3,9 +3,9 @@
 # LARAVEL MIXIN
 
 <p>
-    <a href="https://github.com/biiiiiigmonster/laravel-mixin/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-7389D8.svg?style=flat" ></a>
-    <a href="https://github.com/biiiiiigmonster/laravel-mixin/releases" ><img src="https://img.shields.io/github/release/biiiiiigmonster/laravel-mixin.svg?color=4099DE" /></a> 
-    <a href="https://packagist.org/packages/biiiiiigmonster/laravel-mixin"><img src="https://img.shields.io/packagist/dt/biiiiiigmonster/laravel-mixin.svg?color=" /></a> 
+    <a href="https://github.com/biiiiiigmonster/hasin/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-7389D8.svg?style=flat" ></a>
+    <a href="https://github.com/biiiiiigmonster/hasin/releases" ><img src="https://img.shields.io/github/release/biiiiiigmonster/hasin.svg?color=4099DE" /></a> 
+    <a href="https://packagist.org/packages/biiiiiigmonster/hasin"><img src="https://img.shields.io/packagist/dt/biiiiiigmonster/hasin.svg?color=" /></a> 
     <a><img src="https://img.shields.io/badge/php-7+-59a9f8.svg?style=flat" /></a> 
 </p>
 
@@ -23,7 +23,7 @@
 ## 安装
 
 ```bash
-composer require biiiiiigmonster/laravel-mixin
+composer require biiiiiigmonster/hasin
 ```
 
 ### 简介

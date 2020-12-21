@@ -1,7 +1,6 @@
 <?php
 
-
-namespace BiiiiiigMonster\LaravelMixin\Database\Eloquent;
+namespace BiiiiiigMonster\Hasin\Database\Eloquent;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder;

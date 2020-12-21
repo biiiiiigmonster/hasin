@@ -1,6 +1,6 @@
 {
-    "name": "biiiiiigmonster/laravel-mixin",
-    "description": "Laravel framework mixin",
+    "name": "biiiiiigmonster/hasin",
+    "description": "Laravel framework relation has in implement",
     "type": "library",
     "keywords": ["laravel", "orm", "relation", "whereHas"],
     "license": "MIT",
@@ -12,11 +12,11 @@
     ],
     "autoload": {
         "psr-4": {
-            "BiiiiiigMonster\\LaravelMixin\\": "src/"
+            "BiiiiiigMonster\\Hasin\\": "src/"
         }
     },
     "minimum-stability": "dev",
     "require": {
-        "laravel/framework": "^7.0"
+        "laravel/framework": ">=5.5"
     }
 }
