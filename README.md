@@ -1,6 +1,6 @@
 <div align="center">
 
-# LARAVEL MIXIN
+# LARAVEL HASIN
 
 <p>
     <a href="https://github.com/biiiiiigmonster/hasin/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-7389D8.svg?style=flat" ></a>
