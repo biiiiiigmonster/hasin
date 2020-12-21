@@ -118,16 +118,16 @@ Product::where('name', 'like', '%可乐%')->orNotWhereHasIn('skus', function ($q
 })->get();
 ```
 
-嵌套关联
-
-```php
-Product::hasIn('attrs.values')->get();
-```
-
 > hasMorphIn
 
 ```php
 Image::hasMorphIn('imageable', [Product::class, Brand::class])->get();
+```
+
+#### 嵌套关联
+
+```php
+Product::hasIn('attrs.values')->get();
 ```
 
 ## License
