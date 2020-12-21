@@ -36,37 +36,40 @@ composer require biiiiiigmonster/hasin
 
 > 当主表数据量较多的情况下，`where id in`会有明显的性能提升；当主表数据量较少的时候，两者性能相差无几。
 
-
-主表`test_users`写入`130002`条数据，关联表`test_user_profiles`写入`1002`条数据，查询代码如下
-
 ```php
 <?php
 /**
  * SQL:
  * 
- * select * from `test_users` where exists
- *   (
- *     select * from `test_user_profiles` 
- *     where `test_users`.`id` = `test_user_profiles`.`user_id`
- *  ) 
- * limit 10
+ * select * from `product` 
+ * where exists 
+ *   ( 
+ *      select * from `product_skus` 
+ *      where `product`.`id` = `product_skus`.`p_id` 
+ *      and `product_skus`.`deleted_at` is null 
+ *   ) 
+ * and `product`.`deleted_at` is null 
+ * limit 10 offset 0
  */
-$users1 = User::whereHas('profile')->limit(10)->get();
+$products = Product::has('skus')->paginate(10);
 
 /**
  * SQL:
  * 
- * select * from `test_users` where `test_users`.`id` in 
- *   (
- *     select `test_user_profiles`.`user_id` from `test_user_profiles` 
- *     where `test_users`.`id` = `test_user_profiles`.`user_id`
+ * select * from `product` 
+ * where `product`.`id` IN  
+ *   ( 
+ *      select `product_skus`.`p_id` from `product_skus` 
+ *      where `product`.`id` = `product_skus`.`p_id` 
+ *      and `product_skus`.`deleted_at` is null 
  *   ) 
- * limit 10
+ * and `product`.`deleted_at` is null 
+ * limit 10 offset 0
  */
-$users1 = User::whereHasIn('profile')->limit(10)->get();
+$products = Product::hasIn('skus')->paginate(10);
 ```
 
-> 详细案例sql输出可查看[有道云笔记](https://note.youdao.com/noteshare?id=882bfd7ccdf1370c55326a33333c6f62)
+> `Laravel ORM`十种关联关系详细案例sql输出可查看[有道云笔记](https://note.youdao.com/noteshare?id=882bfd7ccdf1370c55326a33333c6f62)
 
 ### 使用
 
