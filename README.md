@@ -11,7 +11,7 @@
 
 </div>
 
-`hasin(hasMorphIn)`是一个基于`where in`语法实现的`Laravel ORM`关联关系查询的扩展包，部分场景下可以替代`Laravel ORM`中的`has(hasMorphIn)`更高的性能。
+`hasin(hasMorphIn)`是一个基于`where in`语法实现的`Laravel ORM`关联关系查询的扩展包，部分业务场景下可以替代`Laravel ORM`中基于`where exists`语法实现的`has(hasMorphIn)`，以获取更高的性能。
 
 
 ## 环境
