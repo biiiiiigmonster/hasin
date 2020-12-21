@@ -66,13 +66,7 @@ $users1 = User::whereHas('profile')->limit(10)->get();
 $users1 = User::whereHasIn('profile')->limit(10)->get();
 ```
 
-最终耗时如下，可以看出性能相差还是不小的，如果数据量更多一些，这个差距还会更大
-
-```bash
-whereHas   0.50499701499939 秒
-whereHasIn 0.027166843414307 秒
-```
-
+> 详细方法案例可查看[有道云笔记](https://note.youdao.com/noteshare?id=882bfd7ccdf1370c55326a33333c6f62)
 
 ### 使用
 
