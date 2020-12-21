@@ -28,7 +28,7 @@ composer require biiiiiigmonster/hasin
 
 ### 简介
 
-`Laravel`的关联关系查询`whereHas`在日常开发中给我们带来了极大的便利，但是在**主表**数据量比较多的时候会有比较严重的性能问题，主要是因为`whereHas`用了`where exists (select * ...)`这种方式去查询关联数据。
+`Laravel ORM`的关联关系非常强大，基于关联关系的查询`has`也给我们提供了诸多灵活的使用方式，但是在**主表**数据量比较多的时候会有比较严重的性能问题，主要是因为`whereHas`用了`where exists (select * ...)`这种方式去查询关联数据。
 
 
 通过这个扩展包提供的`whereHasIn`方法，可以把语句转化为`where id in (select xxx.id ...)`的形式，从而提高查询性能，下面我们来做一个简单的对比：
@@ -73,6 +73,17 @@ $products = Product::hasIn('skus')->paginate(10);
 
 ### 使用
 
+在配置文件app.php添加配置，自动注册服务
+```php
+<?php
+    // ...
+    
+    'providers' => [
+        // ...
+        
+        BiiiiiigMonster\Hasin\HasinServiceProvider::class,// hasin扩展包引入
+    ],
+```
 此扩展`hasIn(hasMorphIn)`支持`Laravel ORM`中的所有关联关系，入参及使用方式与`has(hasMorph)`完全一致，可安全替换
 
 > hasIn
@@ -131,4 +142,4 @@ Product::hasIn('attrs.values')->get();
 wx：biiiiiigmonster(备注：hasin)
 
 ## License
-[MIT 协议](LICENSE).
+[MIT 协议](LICENSE)
