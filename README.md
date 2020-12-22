@@ -64,7 +64,6 @@ $products = Product::has('skus')->paginate(10);
  * where `product`.`id` IN  
  *   ( 
  *      select `product_skus`.`p_id` from `product_skus` 
- *      where `product`.`id` = `product_skus`.`p_id` 
  *      and `product_skus`.`deleted_at` is null 
  *   ) 
  * and `product`.`deleted_at` is null 
