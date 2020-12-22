@@ -87,7 +87,7 @@ $products = Product::hasIn('skus')->paginate(10);
         BiiiiiigMonster\Hasin\HasinServiceProvider::class,// hasin扩展包引入
     ],
 ```
-此扩展`hasIn(hasMorphIn)`支持`Laravel ORM`中的所有关联关系，入参调用及内部实现流程与框架的`has(hasMorph)`完全一致，可安全使用或替换
+此扩展方法`hasIn(hasMorphIn)`支持`Laravel ORM`中的所有关联关系，入参调用及内部实现流程与框架的`has(hasMorph)`完全一致，可安全使用或替换
 
 > hasIn
 
