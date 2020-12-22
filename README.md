@@ -150,5 +150,5 @@ Category::hasIn('children')->get();
 ## 联系交流
 wx：biiiiiigmonster(备注：hasin)
 
-## License
+## 协议
 [MIT 协议](LICENSE)
