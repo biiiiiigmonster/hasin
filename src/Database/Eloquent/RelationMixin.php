@@ -31,17 +31,10 @@ class RelationMixin
                 return $query->select($columns);
             };
             $hasOneOrMany = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($relation): Builder{
-                /** @var HasOneOrMany $this */
-                $columns = $columns == ['*'] ? $this->getExistenceCompareKey() : $columns;// getExistenceCompareKey借用Exists 语法用到的id
-                if ($query->getQuery()->from == $parentQuery->getQuery()->from) {
-                    return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
-                }
-
                 return $relation($query, $parentQuery, $columns);
             };
             $morphOneOrMany = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($hasOneOrMany): Builder{
                 /** @var MorphOneOrMany $this */
-                $columns = $columns == ['*'] ? $this->getExistenceCompareKey() : $columns;// getExistenceCompareKey借用Exists 语法用到的id
                 return $hasOneOrMany($query, $parentQuery, $columns)->where(
                     $query->qualifyColumn($this->getMorphType()), $this->morphClass
                 );
@@ -51,20 +44,12 @@ class RelationMixin
             $belongsTo = function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder{
                 /** @var BelongsTo $this */
                 $columns = $columns == ['*'] ? $query->qualifyColumn($this->ownerKey) : $columns;
-                if ($parentQuery->getQuery()->from == $query->getQuery()->from) {
-                    return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
-                }
 
                 return $query->select($columns);
             };
             // BelongsToMany (extend Relation, iteration)
             $belongsToMany = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($relation): Builder{
                 /** @var BelongsToMany $this */
-                $columns = $columns == ['*'] ? $this->getExistenceCompareKey() : $columns;// getExistenceCompareKey借用Exists 语法用到的id
-                if ($parentQuery->getQuery()->from == $query->getQuery()->from) {
-                    return $this->getRelationExistenceQueryForSelfJoin($query, $parentQuery, $columns);
-                }
-
                 $this->performJoin($query);
 
                 return $relation($query, $parentQuery, $columns);
@@ -112,7 +97,6 @@ class RelationMixin
             // MorphToMany (extend BelongsToMany, iteration)
             $morphToMany = function (Builder $query, Builder $parentQuery, $columns = ['*'])use($belongsToMany): Builder{
                 /** @var MorphToMany $this */
-                $columns = $columns == ['*'] ? $this->getExistenceCompareKey() : $columns;// getExistenceCompareKey借用Exists 语法用到的id
                 return $belongsToMany($query, $parentQuery, $columns)->where(
                     $this->table.'.'.$this->morphType, $this->morphClass
                 );
