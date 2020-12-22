@@ -62,13 +62,15 @@ class RelationMixin
             $hasManyThrough = function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder{
                 /** @var HasManyThrough $this */
                 $columns = $columns == ['*'] ? $this->getQualifiedFirstKeyName() : $columns;
-                if ($parentQuery->getQuery()->from === $query->getQuery()->from) {
-                    return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
-                }
+//                 if ($parentQuery->getQuery()->from === $query->getQuery()->from) {
+                       // TODO
+//                     return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
+//                 }
 
-                if ($parentQuery->getQuery()->from === $this->throughParent->getTable()) {
-                    return $this->getRelationExistenceQueryForThroughSelfRelation($query, $parentQuery, $columns);
-                }
+//                 if ($parentQuery->getQuery()->from === $this->throughParent->getTable()) {
+                       // TODO
+//                     return $this->getRelationExistenceQueryForThroughSelfRelation($query, $parentQuery, $columns);
+//                 }
 
                 $this->performJoin($query);
 
