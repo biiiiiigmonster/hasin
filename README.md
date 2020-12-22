@@ -11,7 +11,7 @@
 
 </div>
 
-`hasin(hasMorphIn)`是一个基于`where in`语法实现的`Laravel ORM`关联关系查询的扩展包，部分业务场景下可以替代`Laravel ORM`中基于`where exists`语法实现的`has(hasMorphIn)`，以获取更高的性能。
+`hasin`是一个基于`where in`语法实现的`Laravel ORM`关联关系查询的扩展包，部分业务场景下可以替代`Laravel ORM`中基于`where exists`语法实现的`has`，以获取更高的性能。
 
 
 ## 环境
@@ -28,12 +28,12 @@ composer require biiiiiigmonster/hasin
 
 ### 简介
 
-`Laravel ORM`的关联关系非常强大，基于关联关系的查询`has`也给我们提供了诸多灵活的调用方式，然而某些情形下，`has`使用了where exists语法实现
+`Laravel ORM`的关联关系非常强大，基于关联关系的查询`has`也给我们提供了诸多灵活的调用方式，然而某些情形下，`has`使用了**where exists**语法实现
 
 #### `select * from A where exists (select * from B where A.id=B.id)`
 > exists是对外表做loop循环，每次loop循环再对内表（子查询）进行查询，那么因为对内表的查询使用的索引（内表效率高，故可用大表），而外表有多大都需要遍历，不可避免（尽量用小表），故内表大的使用exists，可加快效率。
 
-但是当**A表**数据量较大的时候，就会出现性能问题，那么这时候用**in**语法将会极大的提高性能
+但是当**A表**数据量较大的时候，就会出现性能问题，那么这时候用**where in**语法将会极大的提高性能
 
 #### `select * from A where A.id in (select id from B)`
 > in是把外表和内表做hash连接，先查询内表，再把内表结果与外表匹配，对外表使用索引（外表效率高，可用大表），而内表多大都需要查询，不可避免，故外表大的使用in，可加快效率。
@@ -73,7 +73,7 @@ $products = Product::has('skus')->paginate(10);
 $products = Product::hasIn('skus')->paginate(10);
 ```
 
-> `Laravel ORM`十种关联关系详细案例sql输出可查看[有道云笔记](https://note.youdao.com/noteshare?id=882bfd7ccdf1370c55326a33333c6f62)
+> `Laravel ORM`十种关联关系多达320种case sql输出可查看[有道云笔记](https://note.youdao.com/noteshare?id=882bfd7ccdf1370c55326a33333c6f62)
 
 ### 使用
 
@@ -140,6 +140,11 @@ Image::hasMorphIn('imageable', [Product::class, Brand::class])->get();
 
 ```php
 Product::hasIn('attrs.values')->get();
+```
+
+#### 自关联
+```php
+Category::hasIn('children')->get();
 ```
 
 ## 联系交流
