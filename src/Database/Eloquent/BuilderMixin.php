@@ -26,7 +26,7 @@ class BuilderMixin
             }
 
             if ($relation instanceof MorphTo) {
-                throw new RuntimeException('Please use whereHasMorph() for MorphTo relationships.');
+                throw new RuntimeException('Please use hasMorphIn() for MorphTo relationships.');
             }
 
             // If we only need to check for the existence of the relation, then we can optimize
