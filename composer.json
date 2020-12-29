@@ -18,6 +18,6 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=7",
-        "laravel/framework": ">=5.5"
+        "laravel/framework": ">=5.8"
     }
 }
