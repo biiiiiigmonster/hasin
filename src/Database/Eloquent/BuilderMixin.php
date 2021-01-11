@@ -1,4 +1,5 @@
 <?php
+
 namespace BiiiiiigMonster\Hasin\Database\Eloquent;
 
 use Closure;
@@ -15,7 +16,7 @@ class BuilderMixin
      */
     public function hasIn(): Closure
     {
-        return function ($relation, $operator = '>=', $count = 1, $boolean = 'and', Closure $callback = null): Builder{
+        return function ($relation, $operator = '>=', $count = 1, $boolean = 'and', Closure $callback = null): Builder {
             /** @var Builder $this */
             if (is_string($relation)) {
                 if (strpos($relation, '.') !== false) {
@@ -62,7 +63,7 @@ class BuilderMixin
      */
     protected function hasInNested(): Closure
     {
-        return function ($relations, $operator = '>=', $count = 1, $boolean = 'and', $callback = null): Builder{
+        return function ($relations, $operator = '>=', $count = 1, $boolean = 'and', $callback = null): Builder {
             /** @var Builder $this */
             $relations = explode('.', $relations);
 
@@ -93,7 +94,7 @@ class BuilderMixin
      */
     public function orHasIn(): Closure
     {
-        return function ($relation, $operator = '>=', $count = 1): Builder{
+        return function ($relation, $operator = '>=', $count = 1): Builder {
             /** @var Builder $this */
             return $this->hasIn($relation, $operator, $count, 'or');
         };
@@ -106,7 +107,7 @@ class BuilderMixin
      */
     public function doesntHaveIn(): Closure
     {
-        return function ($relation, $boolean = 'and', Closure $callback = null): Builder{
+        return function ($relation, $boolean = 'and', Closure $callback = null): Builder {
             /** @var Builder $this */
             return $this->hasIn($relation, '<', 1, $boolean, $callback);
         };
@@ -119,9 +120,9 @@ class BuilderMixin
      */
     public function orDoesntHaveIn(): Closure
     {
-        return function ($relation): Builder{
+        return function ($relation): Builder {
             /** @var Builder $this */
-            return $this->doesntHaveIn($relation,'or');
+            return $this->doesntHaveIn($relation, 'or');
         };
     }
 
@@ -132,7 +133,7 @@ class BuilderMixin
      */
     public function whereHasIn(): Closure
     {
-        return function ($relation, Closure $callback = null, $operator = '>=', $count = 1): Builder{
+        return function ($relation, Closure $callback = null, $operator = '>=', $count = 1): Builder {
             /** @var Builder $this */
             return $this->hasIn($relation, $operator, $count, 'and', $callback);
         };
@@ -143,8 +144,9 @@ class BuilderMixin
      *
      * @return Closure
      */
-    public function orWhereHasIn(): Closure{
-        return function ($relation, Closure $callback = null, $operator = '>=', $count = 1): Builder{
+    public function orWhereHasIn(): Closure
+    {
+        return function ($relation, Closure $callback = null, $operator = '>=', $count = 1): Builder {
             /** @var Builder $this */
             return $this->hasIn($relation, $operator, $count, 'or', $callback);
         };
@@ -157,7 +159,7 @@ class BuilderMixin
      */
     public function whereDoesntHaveIn(): Closure
     {
-        return function ($relation, Closure $callback = null): Builder{
+        return function ($relation, Closure $callback = null): Builder {
             /** @var Builder $this */
             return $this->doesntHaveIn($relation, 'and', $callback);
         };
@@ -170,7 +172,7 @@ class BuilderMixin
      */
     public function orWhereDoesntHaveIn(): Closure
     {
-        return function ($relation, Closure $callback = null): Builder{
+        return function ($relation, Closure $callback = null): Builder {
             /** @var Builder $this */
             return $this->doesntHaveIn($relation, 'or', $callback);
         };
@@ -183,11 +185,11 @@ class BuilderMixin
      */
     public function hasMorphIn(): Closure
     {
-        return function ($relation, $types, $operator = '>=', $count = 1, $boolean = 'and', Closure $callback = null): Builder{
+        return function ($relation, $types, $operator = '>=', $count = 1, $boolean = 'and', Closure $callback = null): Builder {
             /** @var Builder $this */
             $relation = $this->getRelationWithoutConstraints($relation);
 
-            $types = (array) $types;
+            $types = (array)$types;
 
             if ($types === ['*']) {
                 $types = $this->model->newModelQuery()->distinct()->pluck($relation->getMorphType())->filter()->all();
@@ -208,7 +210,7 @@ class BuilderMixin
                             };
                         }
 
-                        $query->where($this->query->from.'.'.$relation->getMorphType(), '=', (new $type)->getMorphClass())
+                        $query->where($this->query->from . '.' . $relation->getMorphType(), '=', (new $type)->getMorphClass())
                             ->whereHasIn($belongsTo, $callback, $operator, $count);
                     });
                 }
@@ -223,7 +225,7 @@ class BuilderMixin
      */
     public function orHasMorphIn(): Closure
     {
-        return function ($relation, $types, $operator = '>=', $count = 1): Builder{
+        return function ($relation, $types, $operator = '>=', $count = 1): Builder {
             /** @var Builder $this */
             return $this->hasMorphIn($relation, $types, $operator, $count, 'or');
         };
@@ -236,7 +238,7 @@ class BuilderMixin
      */
     public function doesntHaveMorphIn(): Closure
     {
-        return function ($relation, $types, $boolean = 'and', Closure $callback = null): Builder{
+        return function ($relation, $types, $boolean = 'and', Closure $callback = null): Builder {
             /** @var Builder $this */
             return $this->hasMorphIn($relation, $types, '<', 1, $boolean, $callback);
         };
@@ -249,7 +251,7 @@ class BuilderMixin
      */
     public function orDoesntHaveMorphIn(): Closure
     {
-        return function ($relation, $types): Builder{
+        return function ($relation, $types): Builder {
             /** @var Builder $this */
             return $this->doesntHaveMorphIn($relation, $types, 'or');
         };
@@ -262,7 +264,7 @@ class BuilderMixin
      */
     public function whereHasMorphIn(): Closure
     {
-        return function ($relation, $types, Closure $callback = null, $operator = '>=', $count = 1): Builder{
+        return function ($relation, $types, Closure $callback = null, $operator = '>=', $count = 1): Builder {
             /** @var Builder $this */
             return $this->hasMorphIn($relation, $types, $operator, $count, 'and', $callback);
         };
@@ -275,7 +277,7 @@ class BuilderMixin
      */
     public function orWhereHasMorphIn(): Closure
     {
-        return function ($relation, $types, Closure $callback = null, $operator = '>=', $count = 1): Builder{
+        return function ($relation, $types, Closure $callback = null, $operator = '>=', $count = 1): Builder {
             /** @var Builder $this */
             return $this->hasMorphIn($relation, $types, $operator, $count, 'or', $callback);
         };
@@ -288,7 +290,7 @@ class BuilderMixin
      */
     public function whereDoesntHaveMorphIn(): Closure
     {
-        return function ($relation, $types, Closure $callback = null): Builder{
+        return function ($relation, $types, Closure $callback = null): Builder {
             /** @var Builder $this */
             return $this->doesntHaveMorphIn($relation, $types, 'and', $callback);
         };
@@ -301,7 +303,7 @@ class BuilderMixin
      */
     public function orWhereDoesntHaveMorphIn(): Closure
     {
-        return function ($relation, $types, Closure $callback = null): Builder{
+        return function ($relation, $types, Closure $callback = null): Builder {
             /** @var Builder $this */
             return $this->doesntHaveMorphIn($relation, $types, 'or', $callback);
         };
@@ -314,7 +316,7 @@ class BuilderMixin
      */
     protected function addHasInWhere(): Closure
     {
-        return function (Builder $hasInQuery, Relation $relation, $operator, $count, $boolean): Builder{
+        return function (Builder $hasInQuery, Relation $relation, $operator, $count, $boolean): Builder {
             /** @var Builder $this */
             $hasInQuery->mergeConstraintsFrom($relation->getQuery());
 

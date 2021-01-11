@@ -1,4 +1,5 @@
 <?php
+
 namespace BiiiiiigMonster\Hasin;
 
 use BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin;
