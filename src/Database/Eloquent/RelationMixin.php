@@ -105,20 +105,7 @@ class RelationMixin
                     $this->table . '.' . $this->morphType, $this->morphClass
                 );
             };
-            /* After all the above code is abbreviated, you can clearly see the inheritance relationship, which perfectly fits the inheritance structure of the original framework */
 
-            /**
-             * 上面的这些方法本应该是期望存在各个类中
-             * $belongsTo：BelongsTo::getRelationInQuery
-             * $hasManyThrough：HasManyThrough::getRelationInQuery
-             * $relation：Relation::getRelationInQuery
-             * ……
-             * 本方法getRelationInQuery是对应getRelationExistenceQuery，都是对QueriesRelationships的实现底层支持
-             * 但是框架的代码没法去写，虽然提供mixin混入，但是又因为各个关联类中存在继承，mixin无法支持针对继承类的方法单独混入
-             * （有点绕，去实践一下就明白了），所以采用闭包的方式模拟方法继承（这种实现方式真的是灵光一闪）
-             * 于是乎就定义好了方法之后，根据当前类名来进行动态函数调用
-             * 这一套实现我愿称之为最强！！！
-             */
             $relationName = (string)Str::of(get_class($this))->afterLast('\\')->camel();
             return ${$relationName}($query, $parentQuery, $columns);
         };

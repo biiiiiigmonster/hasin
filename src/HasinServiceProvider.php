@@ -12,9 +12,9 @@ class HasinServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        // Eloquent\Builder混入宏，提供whereHasIn系列实现
+        // Eloquent\Builder mixin，provides hasin series implementation
         Builder::mixin(new BuilderMixin());
-        // Eloquent\Relation混入宏，对whereHasIn底层提供支持
+        // Eloquent\Relation mixin，support for the bottom layer of hasin
         Relation::mixin(new RelationMixin());
     }
 }

@@ -75,7 +75,7 @@ class BuilderMixin
             }
 
             $closure = function ($q) use (&$closure, &$relations, $operator, $count, $callback) {
-                // In order to nest "has", we need to add count relation constraints on the
+                // In order to nest "hasIn", we need to add count relation constraints on the
                 // callback Closure. We'll do this by simply passing the Closure its own
                 // reference to itself so it calls itself recursively on each segment.
                 count($relations) > 1
