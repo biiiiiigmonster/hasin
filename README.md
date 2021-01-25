@@ -1,3 +1,5 @@
+English | [中文](./README-CN.md)
+
 <div align="center">
 
 # LARAVEL HASIN
@@ -11,34 +13,38 @@
 
 </div>
 
-`hasin`是一个基于`where in`语法实现的`Laravel ORM`关联关系查询的扩展包，部分业务场景下可以替代`Laravel ORM`中基于`where exists`语法实现的`has`，以获取更高的性能。
+`hasin` is an extension package based on `where in` syntax to query the association relationship of `laravel ORM`, which can replace has based on `where exists` syntax in `laravel ORM` in some business scenarios to obtain higher performance.
 
-
-## 环境
+# Environment
 
 - PHP >= 7.1
 - laravel >= 5.8
 
 
-## 安装
+# Installation
 
 ```bash
 composer require biiiiiigmonster/hasin
 ```
 
-## 简介
+# Introductions
 
-`Laravel ORM`的关联关系非常强大，基于关联关系的查询`has`也给我们提供了诸多灵活的调用方式，然而某些情形下，`has`使用了**where exists**语法实现
+The relationship of `laravel ORM` is very powerful, and the query `has` based on the relationship also provides us with many flexible calling methods. However, in some cases, `has` is implemented with **where exists** syntax.
 
-#### `select * from A where exists (select * from B where A.id=B.a_id)`
-> exists是对外表做loop循环，每次loop循环再对内表（子查询）进行查询，那么因为对内表的查询使用的索引（内表效率高，故可用大表），而外表有多大都需要遍历，不可避免（尽量用小表），故内表大的使用exists，可加快效率。
+For example:
+```php
+// User hasMany Post
+User::has('posts')->get();
+```
+#### `select * from users where exists (select * from posts where user.id=post.user_id)`
+> 'exists' is a loop to the external table, and then queries the internal table (subquery) every time. Because the index used for the query of the internal table (the internal table is efficient, so it can be used as a large table), and how much of the external table needs to be traversed, it is inevitable (try to use a small table), so the use of exists for the large internal table can speed up the efficiency.
 
-但是当**A表**数据量较大的时候，就会出现性能问题，那么这时候用**where in**语法将会极大的提高性能
+However, when the **users** has a large amount of data, there will be performance problems, so the **where in** syntax will greatly improve the performance.
 
-#### `select * from A where A.id in (select B.a_id from B)`
-> in是把外表和内表做hash连接，先查询内表，再把内表结果与外表匹配，对外表使用索引（外表效率高，可用大表），而内表多大都需要查询，不可避免，故外表大的使用in，可加快效率。
+#### `select * from users where user.id in (select posts.user_id from posts)`
+> 'in' is to hash connect the appearance and inner table, first query the inner table, then match the result of the inner table with the appearance, and use the index for the outer table (the appearance is efficient, and large tables can be used). Most of the inner tables need to be queried, which is inevitable. Therefore, using 'in' with large appearance can speed up the efficiency.
 
-因此在代码中使用`has(hasMorph)`或者`hasIn(hasMorphIn)`应由**数据体量**来决定……
+Therefore, it is recommended to use `hasIn(hasMorphIn)` instead of `has(hasMorph)` in code to achieve higher performance.
 
 ```php
 <?php
@@ -72,11 +78,9 @@ $products = Product::has('skus')->paginate(10);
 $products = Product::hasIn('skus')->paginate(10);
 ```
 
-> `Laravel ORM`十种关联关系多达248种实际业务case sql输出可查看[有道云笔记](https://note.youdao.com/noteshare?id=882bfd7ccdf1370c55326a33333c6f62)
+# Usage example
 
-## 使用
-
-在配置文件app.php添加配置，自动注册服务
+You should add it to the `providers` array in the `config/app.php` file.
 ```php
 <?php
     // ...
@@ -84,10 +88,10 @@ $products = Product::hasIn('skus')->paginate(10);
     'providers' => [
         // ...
         
-        BiiiiiigMonster\Hasin\HasinServiceProvider::class,// hasin扩展包引入
+        BiiiiiigMonster\Hasin\HasinServiceProvider::class,
     ],
 ```
-此扩展方法`hasIn(hasMorphIn)`支持`Laravel ORM`中的所有关联关系，入参调用及内部实现流程与框架的`has(hasMorph)`完全一致，可安全使用或替换
+`hasIn(hasMorphIn)` supports all `Relation` in `laravel ORM`. The input parameter call and internal implementation process are completely consistent with `has(hasMorph)` of the framework, and can be used or replaced safely
 
 > hasIn
 
@@ -96,13 +100,13 @@ $products = Product::hasIn('skus')->paginate(10);
 Product::hasIn('skus')->get();
 
 // orHasIn
-Product::where('name', 'like', '%拌饭酱%')->orHasIn('skus')->get();
+Product::where('name', 'like', '%chocolates%')->orHasIn('skus')->get();
 
 // doesntHaveIn
 Product::doesntHaveIn('skus')->get();
 
 // orDoesntHaveIn
-Product::where('name', 'like', '%拌饭酱%')->orDoesntHaveIn('skus')->get();
+Product::where('name', 'like', '%chocolates%')->orDoesntHaveIn('skus')->get();
 ```
 
 > whereHasIn
@@ -114,7 +118,7 @@ Product::whereHasIn('skus', function ($query) {
 })->get();
 
 // orWhereHasIn
-Product::where('name', 'like', '%拌饭酱%')->orWhereHasIn('skus', function ($query) {
+Product::where('name', 'like', '%chocolates%')->orWhereHasIn('skus', function ($query) {
     $query->where('sales', '>', 10);
 })->get();
 
@@ -124,7 +128,7 @@ Product::whereDoesntHaveIn('skus', function ($query) {
 })->get();
 
 // orWhereDoesntHaveIn
-Product::where('name', 'like', '%拌饭酱%')->orWhereDoesntHaveIn('skus', function ($query) {
+Product::where('name', 'like', '%chocolates%')->orWhereDoesntHaveIn('skus', function ($query) {
     $query->where('sales', '>', 10);
 })->get();
 ```
@@ -135,19 +139,16 @@ Product::where('name', 'like', '%拌饭酱%')->orWhereDoesntHaveIn('skus', funct
 Image::hasMorphIn('imageable', [Product::class, Brand::class])->get();
 ```
 
-### 嵌套关联
+### Nested Relation
 
 ```php
 Product::hasIn('attrs.values')->get();
 ```
 
-### 自关联
+### Self Relation 
 ```php
 Category::hasIn('children')->get();
 ```
 
-## 联系交流
-wx：biiiiiigmonster(备注：hasin)
-
-## 协议
-[MIT 协议](LICENSE)
+# License
+[MIT](./LICENSE)
