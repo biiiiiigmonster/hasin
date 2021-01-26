@@ -51,31 +51,27 @@ Therefore, it is recommended to use `hasIn(hasMorphIn)` instead of `has(hasMorph
 /**
  * SQL:
  * 
- * select * from `product` 
+ * select * from `users` 
  * where exists 
  *   ( 
- *      select * from `product_skus` 
- *      where `product`.`id` = `product_skus`.`p_id` 
- *      and `product_skus`.`deleted_at` is null 
+ *      select * from `posts` 
+ *      where `users`.`id` = `posts`.`user_id` 
  *   ) 
- * and `product`.`deleted_at` is null 
  * limit 10 offset 0
  */
-$products = Product::has('skus')->paginate(10);
+$products = User::has('posts')->paginate(10);
 
 /**
  * SQL:
  * 
- * select * from `product` 
- * where `product`.`id` IN  
+ * select * from `users` 
+ * where `users`.`id` in  
  *   ( 
- *      select `product_skus`.`p_id` from `product_skus` 
- *      and `product_skus`.`deleted_at` is null 
+ *      select `posts`.`user_id` from `posts` 
  *   ) 
- * and `product`.`deleted_at` is null 
  * limit 10 offset 0
  */
-$products = Product::hasIn('skus')->paginate(10);
+$products = User::hasIn('posts')->paginate(10);
 ```
 
 # Usage example
@@ -97,57 +93,57 @@ You should add it to the `providers` array in the `config/app.php` file.
 
 ```php
 // hasIn
-Product::hasIn('skus')->get();
+Users::hasIn('posts')->get();
 
 // orHasIn
-Product::where('name', 'like', '%chocolates%')->orHasIn('skus')->get();
+Users::where('age', '>', 18)->orHasIn('posts')->get();
 
 // doesntHaveIn
-Product::doesntHaveIn('skus')->get();
+Users::doesntHaveIn('posts')->get();
 
 // orDoesntHaveIn
-Product::where('name', 'like', '%chocolates%')->orDoesntHaveIn('skus')->get();
+Users::where('age', '>', 18)->orDoesntHaveIn('posts')->get();
 ```
 
 > whereHasIn
 
 ```php
 // whereHasIn
-Product::whereHasIn('skus', function ($query) {
-    $query->where('sales', '>', 10);
+Users::whereHasIn('posts', function ($query) {
+    $query->where('votes', '>', 10);
 })->get();
 
 // orWhereHasIn
-Product::where('name', 'like', '%chocolates%')->orWhereHasIn('skus', function ($query) {
-    $query->where('sales', '>', 10);
+Users::where('age', '>', 18)->orWhereHasIn('posts', function ($query) {
+    $query->where('votes', '>', 10);
 })->get();
 
 // whereDoesntHaveIn
-Product::whereDoesntHaveIn('skus', function ($query) {
-    $query->where('sales', '>', 10);
+Users::whereDoesntHaveIn('posts', function ($query) {
+    $query->where('votes', '>', 10);
 })->get();
 
 // orWhereDoesntHaveIn
-Product::where('name', 'like', '%chocolates%')->orWhereDoesntHaveIn('skus', function ($query) {
-    $query->where('sales', '>', 10);
+Users::where('age', '>', 18)->orWhereDoesntHaveIn('posts', function ($query) {
+    $query->where('votes', '>', 10);
 })->get();
 ```
 
 > hasMorphIn
 
 ```php
-Image::hasMorphIn('imageable', [Product::class, Brand::class])->get();
+Image::hasMorphIn('imageable', [Posts::class, Comments::class])->get();
 ```
 
 ### Nested Relation
 
 ```php
-Product::hasIn('attrs.values')->get();
+Users::hasIn('posts.comments')->get();
 ```
 
 ### Self Relation 
 ```php
-Category::hasIn('children')->get();
+Users::hasIn('children')->get();
 ```
 
 # License
