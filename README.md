@@ -36,12 +36,12 @@ For example:
 // User hasMany Post
 User::has('posts')->get();
 ```
-#### `select * from users where exists (select * from posts where user.id=post.user_id)`
-> 'exists' is a loop to the external table, and then queries the internal table (subquery) every time. Because the index used for the query of the internal table (the internal table is efficient, so it can be used as a large table), and how much of the external table needs to be traversed, it is inevitable (try to use a small table), so the use of exists for the large internal table can speed up the efficiency.
+#### `select * from users where exists (select * from posts where user.id=posts.user_id)`
+> 'exists' is a loop to the external table, and then queries the internal table (subQuery) every time. Because the index used for the query of the internal table (the internal table is efficient, so it can be used as a large table), and how much of the external table needs to be traversed, it is inevitable (try to use a small table), so the use of exists for the large internal table can speed up the efficiency.
 
 However, when the **Users** has a large amount of data, there will be performance problems, so the **where in** syntax will greatly improve the performance.
 
-#### `select * from users where user.id in (select posts.user_id from posts)`
+#### `select * from users where users.id in (select posts.user_id from posts)`
 > 'in' is to hash connect the appearance and inner table, first query the inner table, then match the result of the inner table with the appearance, and use the index for the outer table (the appearance is efficient, and large tables can be used). Most of the inner tables need to be queried, which is inevitable. Therefore, using 'in' with large appearance can speed up the efficiency.
 
 Therefore, it is recommended to use `hasIn(hasMorphIn)` instead of `has(hasMorph)` in code to achieve higher performance.
@@ -59,7 +59,7 @@ Therefore, it is recommended to use `hasIn(hasMorphIn)` instead of `has(hasMorph
  *   ) 
  * limit 10 offset 0
  */
-$products = User::has('posts')->paginate(10);
+$users = User::has('posts')->paginate(10);
 
 /**
  * SQL:
@@ -71,7 +71,7 @@ $products = User::has('posts')->paginate(10);
  *   ) 
  * limit 10 offset 0
  */
-$products = User::hasIn('posts')->paginate(10);
+$users = User::hasIn('posts')->paginate(10);
 ```
 
 # Usage example
