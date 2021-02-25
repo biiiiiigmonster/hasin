@@ -4,7 +4,7 @@ namespace BiiiiiigMonster\Hasin;
 
 use BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin;
 use BiiiiiigMonster\Hasin\Database\Eloquent\RelationMixin;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
