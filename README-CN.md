@@ -74,17 +74,6 @@ $users = User::hasIn('posts')->paginate(10);
 
 ## 使用
 
-在配置文件app.php添加配置，自动注册服务
-```php
-<?php
-    // ...
-    
-    'providers' => [
-        // ...
-        
-        BiiiiiigMonster\Hasin\HasinServiceProvider::class,// hasin扩展包引入
-    ],
-```
 此扩展方法`hasIn(hasMorphIn)`支持`Laravel ORM`中的所有关联关系，入参调用及内部实现流程与框架的`has(hasMorph)`完全一致，可安全使用或替换
 
 > hasIn

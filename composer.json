@@ -16,6 +16,13 @@
         }
     },
     "minimum-stability": "dev",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "BiiiiiigMonster\\Hasin\\HasinServiceProvider"
+            ]
+        }
+    },
     "require": {
         "php": ">=7.1",
         "laravel/framework": ">=5.8"
