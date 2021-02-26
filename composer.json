@@ -7,7 +7,8 @@
     "authors": [
         {
             "name": "moyou",
-            "email": "603707288@qq.com"
+            "email": "603707288@qq.com",
+            "wechat": "biiiiiigmonster"
         }
     ],
     "autoload": {
@@ -15,7 +16,6 @@
             "BiiiiiigMonster\\Hasin\\": "src/"
         }
     },
-    "minimum-stability": "dev",
     "extra": {
         "laravel": {
             "providers": [
