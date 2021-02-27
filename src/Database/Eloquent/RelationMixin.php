@@ -107,7 +107,7 @@ class RelationMixin
             };
 
             $relationName = Str::camel(last(explode('\\', get_class($this))));
-            return ${$relationName}($query, $parentQuery, $columns);
+            return ${$relationName}($query, $parentQuery, $columns)->distinct();
         };
     }
 
