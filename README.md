@@ -36,7 +36,7 @@ For example:
 // User hasMany Post
 User::has('posts')->get();
 ```
-#### `select * from users where exists (select * from posts where user.id=posts.user_id)`
+#### `select * from users where exists (select * from posts where users.id=posts.user_id)`
 > 'exists' is a loop to the external table, and then queries the internal table (subQuery) every time. Because the index used for the query of the internal table (the internal table is efficient, so it can be used as a large table), and how much of the external table needs to be traversed, it is inevitable (try to use a small table), so the use of exists for the large internal table can speed up the efficiency.
 
 However, when the **Users** has a large amount of data, there will be performance problems, so the **where in** syntax will greatly improve the performance.
@@ -128,11 +128,6 @@ Image::hasMorphIn('imageable', [Posts::class, Comments::class])->get();
 
 ```php
 Users::hasIn('posts.comments')->get();
-```
-
-### Self Relation 
-```php
-Users::hasIn('children')->get();
 ```
 
 # License
