@@ -40,7 +40,7 @@ composer require biiiiiigmonster/hasin
 #### `select * from users where users.id in (select posts.user_id from posts)`
 > in是把外表和内表做hash连接，先查询内表，再把内表结果与外表匹配，对外表使用索引（外表效率高，可用大表），而内表多大都需要查询，不可避免，故外表大的使用in，可加快效率。
 
-因此建议在代码中使用`hasIn(hasMorphIn)`来代替`has(hasMorph)`来获取更高的性能……
+因此在代码中使用`has(hasMorph)`或者`hasIn(hasMorphIn)`应由**数据体量**来决定……
 
 ```php
 <?php

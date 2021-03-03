@@ -44,7 +44,7 @@ However, when the **Users** has a large amount of data, there will be performanc
 #### `select * from users where users.id in (select posts.user_id from posts)`
 > 'in' is to hash connect the appearance and inner table, first query the inner table, then match the result of the inner table with the appearance, and use the index for the outer table (the appearance is efficient, and large tables can be used). Most of the inner tables need to be queried, which is inevitable. Therefore, using 'in' with large appearance can speed up the efficiency.
 
-Therefore, it is recommended to use `hasIn(hasMorphIn)` instead of `has(hasMorph)` in code to achieve higher performance.
+Therefore, the use of `has(hasMorph)` or `hasIn(hasMorphIn)` in code should be determined by **data size**
 
 ```php
 <?php
