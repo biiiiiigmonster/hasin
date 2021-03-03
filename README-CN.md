@@ -32,6 +32,11 @@ composer require biiiiiigmonster/hasin
 
 `Laravel ORM`的关联关系非常强大，基于关联关系的查询`has`也给我们提供了诸多灵活的调用方式，然而某些情形下，`has`使用了**where exists**语法实现
 
+例如:
+```php
+// User hasMany Post
+User::has('posts')->get();
+```
 #### `select * from users where exists (select * from posts where users.id=posts.user_id)`
 > exists是对外表做loop循环，每次loop循环再对内表（子查询）进行查询，那么因为对内表的查询使用的索引（内表效率高，故可用大表），而外表有多大都需要遍历，不可避免（尽量用小表），故内表大的使用exists，可加快效率。
 
