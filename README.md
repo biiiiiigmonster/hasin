@@ -82,38 +82,38 @@ $users = User::hasIn('posts')->paginate(10);
 
 ```php
 // hasIn
-Users::hasIn('posts')->get();
+User::hasIn('posts')->get();
 
 // orHasIn
-Users::where('age', '>', 18)->orHasIn('posts')->get();
+User::where('age', '>', 18)->orHasIn('posts')->get();
 
 // doesntHaveIn
-Users::doesntHaveIn('posts')->get();
+User::doesntHaveIn('posts')->get();
 
 // orDoesntHaveIn
-Users::where('age', '>', 18)->orDoesntHaveIn('posts')->get();
+User::where('age', '>', 18)->orDoesntHaveIn('posts')->get();
 ```
 
 > whereHasIn
 
 ```php
 // whereHasIn
-Users::whereHasIn('posts', function ($query) {
+User::whereHasIn('posts', function ($query) {
     $query->where('votes', '>', 10);
 })->get();
 
 // orWhereHasIn
-Users::where('age', '>', 18)->orWhereHasIn('posts', function ($query) {
+User::where('age', '>', 18)->orWhereHasIn('posts', function ($query) {
     $query->where('votes', '>', 10);
 })->get();
 
 // whereDoesntHaveIn
-Users::whereDoesntHaveIn('posts', function ($query) {
+User::whereDoesntHaveIn('posts', function ($query) {
     $query->where('votes', '>', 10);
 })->get();
 
 // orWhereDoesntHaveIn
-Users::where('age', '>', 18)->orWhereDoesntHaveIn('posts', function ($query) {
+User::where('age', '>', 18)->orWhereDoesntHaveIn('posts', function ($query) {
     $query->where('votes', '>', 10);
 })->get();
 ```
@@ -121,13 +121,13 @@ Users::where('age', '>', 18)->orWhereDoesntHaveIn('posts', function ($query) {
 > hasMorphIn
 
 ```php
-Image::hasMorphIn('imageable', [Posts::class, Comments::class])->get();
+Image::hasMorphIn('imageable', [Post::class, Comment::class])->get();
 ```
 
 ### Nested Relation
 
 ```php
-Users::hasIn('posts.comments')->get();
+User::hasIn('posts.comments')->get();
 ```
 
 # License
