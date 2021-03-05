@@ -76,7 +76,7 @@ $users = User::hasIn('posts')->paginate(10);
 
 # Usage example
 
-`hasIn(hasMorphIn)` supports all `Relation` in `laravel ORM`. The input parameter call and internal implementation process are completely consistent with `has(hasMorph)` of the framework, and can be used or replaced safely
+`hasIn(hasMorphIn)` supports all `Relations` in `laravel ORM`. The input parameter call and internal implementation process are completely consistent with `has(hasMorph)` of the framework, and can be used or replaced safely
 
 > hasIn
 

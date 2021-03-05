@@ -6,9 +6,8 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "moyou",
-            "email": "603707288@qq.com",
-            "wechat": "biiiiiigmonster"
+            "name": "YunFeng Lu",
+            "email": "603707288@qq.com"
         }
     ],
     "autoload": {
