@@ -13,7 +13,7 @@ English | [中文](./README-CN.md)
 
 </div>
 
-`hasin` is a composer package based on `where in` syntax to query the relationship of `laravel ORM`, which can replace `has` based on `where exists` syntax in `laravel ORM` in some business scenarios to obtain higher performance.
+The `hasin` is composer package based on `where in` syntax to query the relationship of `laravel ORM`, which can replace `has` based on `where exists` syntax in some business scenarios to obtain higher performance.
 
 # Environment
 
