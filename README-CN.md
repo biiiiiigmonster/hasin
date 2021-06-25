@@ -37,10 +37,10 @@ composer require biiiiiigmonster/hasin
 // User hasMany Post
 User::has('posts')->get();
 ```
-#### `select * from users where exists (select * from posts where users.id=posts.user_id)`
+#### `select * from users where exists (select * from posts where users.id = posts.user_id)`
 > exists是对外表做loop循环，每次loop循环再对内表（子查询）进行查询，那么因为对内表的查询使用的索引（内表效率高，故可用大表），而外表有多大都需要遍历，不可避免（尽量用小表），故内表大的使用exists，可加快效率。
 
-但是当**A表**数据量较大的时候，就会出现性能问题，那么这时候用**where in**语法将会极大的提高性能
+但是当**User表**数据量较大的时候，就会出现性能问题，那么这时候用**where in**语法将会极大的提高性能
 
 #### `select * from users where users.id in (select posts.user_id from posts)`
 > in是把外表和内表做hash连接，先查询内表，再把内表结果与外表匹配，对外表使用索引（外表效率高，可用大表），而内表多大都需要查询，不可避免，故外表大的使用in，可加快效率。
@@ -79,7 +79,7 @@ $users = User::hasIn('posts')->paginate(10);
 
 ## 使用
 
-此扩展方法`hasIn(hasMorphIn)`支持`Laravel ORM`中的所有关联关系，入参调用及内部实现流程与框架的`has(hasMorph)`完全一致，可安全使用或替换
+此扩展方法`hasIn(hasMorphIn)`支持`Laravel ORM`中的所有关联关系，入参调用及内部实现流程与框架的`has(hasMorph)`完全一致。
 
 > hasIn
 
