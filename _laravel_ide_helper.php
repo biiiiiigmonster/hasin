@@ -60,6 +60,18 @@ namespace Illuminate\Database\Eloquent
             }
 
             /**
+             * Add a relationship count / whereIn condition to the query with an "or".
+             *
+             * @return Closure
+             *
+             * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
+             */
+            public function orDoesntHaveIn()
+            {
+                return $this;
+            }
+
+            /**
              * Add a relationship count / whereIn condition to the query with where clauses.
              *
              * @param string        $relation
@@ -187,6 +199,18 @@ namespace Illuminate\Database\Eloquent
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
              */
             public function orDoesntHaveMorphIn($relation, $types)
+            {
+                return $this;
+            }
+
+            /**
+             * Add a polymorphic relationship count / whereIn condition to the query with where clauses.
+             *
+             * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
+             *
+             * @return Closure
+             */
+            public function whereHasMorphIn()
             {
                 return $this;
             }
