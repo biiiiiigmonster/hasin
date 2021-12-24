@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use RuntimeException;
 
 class BuilderMixin
 {
@@ -19,7 +20,7 @@ class BuilderMixin
         return function ($relation, $operator = '>=', $count = 1, $boolean = 'and', Closure $callback = null): Builder {
             /** @var Builder $this */
             if (is_string($relation)) {
-                if (strpos($relation, '.') !== false) {
+                if (str_contains($relation, '.')) {
                     return $this->hasInNested($relation, $operator, $count, $boolean, $callback);
                 }
 
@@ -310,7 +311,7 @@ class BuilderMixin
     }
 
     /**
-     * Add the "has" condition whereIn clause to the query.
+     * Add the "hasin" condition whereIn clause to the query.
      *
      * @return Closure
      */

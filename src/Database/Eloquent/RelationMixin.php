@@ -106,7 +106,7 @@ class RelationMixin
                 );
             };
 
-            $relationName = Str::camel(last(explode('\\', get_class($this))));
+            $relationName = (string)Str::of($this::class)->afterLast('\\')->camel();
             return ${$relationName}($query, $parentQuery, $columns)->distinct();
         };
     }
@@ -158,7 +158,7 @@ class RelationMixin
                 return $belongsToMany();
             };
 
-            $relationName = Str::camel(last(explode('\\', get_class($this))));
+            $relationName = (string)Str::of($this::class)->afterLast('\\')->camel();
             return ${$relationName}();
         };
     }
