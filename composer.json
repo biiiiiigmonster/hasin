@@ -23,7 +23,7 @@
         }
     },
     "require": {
-        "php": "^8.0",
-        "laravel/framework": "^8.0"
+        "php": ">=7",
+        "laravel/framework": "5.5.*"
     }
 }

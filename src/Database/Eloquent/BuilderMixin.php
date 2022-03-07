@@ -20,7 +20,7 @@ class BuilderMixin
         return function ($relation, $operator = '>=', $count = 1, $boolean = 'and', Closure $callback = null): Builder {
             /** @var Builder $this */
             if (is_string($relation)) {
-                if (str_contains($relation, '.')) {
+                if (strpos($relation, '.') !== false) {
                     return $this->hasInNested($relation, $operator, $count, $boolean, $callback);
                 }
 

@@ -106,7 +106,7 @@ class RelationMixin
                 );
             };
 
-            $relationName = (string)Str::of($this::class)->afterLast('\\')->camel();
+            $relationName = Str::camel(last(explode('\\', get_class($this))));
             return ${$relationName}($query, $parentQuery, $columns)->distinct();
         };
     }
@@ -127,7 +127,10 @@ class RelationMixin
 
             $belongsTo = function (): string {
                 /** @var BelongsTo $this */
-                return $this->getQualifiedForeignKeyName();
+                $method = method_exists($this, 'getQualifiedForeignKey')
+                    ? 'getQualifiedForeignKey'
+                    : 'getQualifiedForeignKeyName';
+                return $this->$method();
             };
             $belongsToMany = function () use ($relation): string {
                 return $relation();
@@ -158,7 +161,7 @@ class RelationMixin
                 return $belongsToMany();
             };
 
-            $relationName = (string)Str::of($this::class)->afterLast('\\')->camel();
+            $relationName = Str::camel(last(explode('\\', get_class($this))));
             return ${$relationName}();
         };
     }
