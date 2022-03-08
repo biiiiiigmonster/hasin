@@ -32,7 +32,7 @@ composer require biiiiiigmonster/hasin
 The relationship of `laravel ORM` is very powerful, and the query `has` based on the relationship also provides us with many flexible calling methods. However, in some cases, `has` is implemented with **where exists** syntax.
 
 For example:
-```php
+```injectablephp
 // User hasMany Post
 User::has('posts')->get();
 ```
@@ -46,8 +46,7 @@ However, when the **User** has a large amount of data, there will be performance
 
 Therefore, the use of `has(hasMorph)` or `hasIn(hasMorphIn)` in code should be determined by **data size**
 
-```php
-<?php
+```injectablephp
 /**
  * SQL:
  * 
@@ -80,7 +79,7 @@ $users = User::hasIn('posts')->paginate(10);
 
 > hasIn
 
-```php
+```injectablephp
 // hasIn
 User::hasIn('posts')->get();
 
@@ -96,7 +95,7 @@ User::where('age', '>', 18)->orDoesntHaveIn('posts')->get();
 
 > whereHasIn
 
-```php
+```injectablephp
 // whereHasIn
 User::whereHasIn('posts', function ($query) {
     $query->where('votes', '>', 10);
@@ -120,13 +119,13 @@ User::where('age', '>', 18)->orWhereDoesntHaveIn('posts', function ($query) {
 
 > hasMorphIn
 
-```php
+```injectablephp
 Image::hasMorphIn('imageable', [Post::class, Comment::class])->get();
 ```
 
 ### Nested Relation
 
-```php
+```injectablephp
 User::hasIn('posts.comments')->get();
 ```
 

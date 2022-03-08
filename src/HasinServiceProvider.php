@@ -7,13 +7,9 @@ use BiiiiiigMonster\Hasin\Database\Eloquent\RelationMixin;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
-use ReflectionException;
 
 class HasinServiceProvider extends ServiceProvider
 {
-    /**
-     * @throws ReflectionException
-     */
     public function register()
     {
         // Eloquent\Builder mixin, provides hasin series implementation.
