@@ -23,6 +23,6 @@
         }
     },
     "require": {
-        "laravel/framework": "^9.0"
+        "laravel/framework": ">=9"
     }
 }
