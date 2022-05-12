@@ -17,8 +17,7 @@ The `hasin` is composer package based on `where in` syntax to query the relation
 
 # Environment
 
-- PHP >= 7
-- laravel >= 5.5
+- laravel >= 9
 
 
 # Installation

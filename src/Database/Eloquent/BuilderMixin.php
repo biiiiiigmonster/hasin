@@ -6,7 +6,6 @@ use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use RuntimeException;
 
 class BuilderMixin
 {
@@ -28,14 +27,14 @@ class BuilderMixin
             }
 
             if ($relation instanceof MorphTo) {
-                throw new RuntimeException('Please use hasMorphIn() for MorphTo relationships.');
+                return $this->hasMorphIn($relation, ['*'], $operator, $count, $boolean, $callback);
             }
 
             // If we only need to check for the existence of the relation, then we can optimize
             // the subquery to only run a "where in" clause instead of this full "count"
             // clause. This will make these queries run much faster compared with a count.
             $method = $this->canUseExistsForExistenceCheck($operator, $count)
-                ? 'getRelationInQuery'
+                ? 'getRelationExistenceInQuery'
                 : 'getRelationExistenceCountQuery';
 
             $hasInQuery = $relation->{$method}(
