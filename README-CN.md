@@ -15,12 +15,6 @@
 
 `hasin`是一个基于`where in`语法实现的`Laravel ORM`关联关系查询的扩展包，部分业务场景下可以替代`Laravel ORM`中基于`where exists`语法实现的`has`，以获取更高的性能。
 
-
-## 环境
-
-- laravel >= 9
-
-
 ## 安装
 
 | Laravel 版本 | 安装命令 |
