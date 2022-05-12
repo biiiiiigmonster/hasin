@@ -34,8 +34,8 @@ class BuilderMixin
             // the subquery to only run a "where in" clause instead of this full "count"
             // clause. This will make these queries run much faster compared with a count.
             $method = $this->canUseExistsForExistenceCheck($operator, $count)
-                ? 'getRelationExistenceInQuery'
-                : 'getRelationExistenceCountQuery';
+                            ? 'getRelationExistenceInQuery'
+                            : 'getRelationExistenceCountQuery';
 
             $hasInQuery = $relation->{$method}(
                 $relation->getRelated()->newQueryWithoutRelationships(), $this
@@ -187,7 +187,9 @@ class BuilderMixin
     {
         return function ($relation, $types, $operator = '>=', $count = 1, $boolean = 'and', Closure $callback = null): Builder {
             /** @var Builder $this */
-            $relation = $this->getRelationWithoutConstraints($relation);
+            if (is_string($relation)) {
+                $relation = $this->getRelationWithoutConstraints($relation);
+            }
 
             $types = (array)$types;
 
@@ -210,7 +212,7 @@ class BuilderMixin
                             };
                         }
 
-                        $query->where($this->query->from . '.' . $relation->getMorphType(), '=', (new $type)->getMorphClass())
+                        $query->where($this->qualifyColumn($relation->getMorphType()), '=', (new $type)->getMorphClass())
                             ->whereHasIn($belongsTo, $callback, $operator, $count);
                     });
                 }
@@ -306,6 +308,62 @@ class BuilderMixin
         return function ($relation, $types, Closure $callback = null): Builder {
             /** @var Builder $this */
             return $this->doesntHaveMorphIn($relation, $types, 'or', $callback);
+        };
+    }
+
+    /**
+     * Add a basic where clause to a relationship query.
+     *
+     * @return Closure
+     */
+    public function whereRelationIn(): Closure
+    {
+        return function ($relation, $column, $operator = null, $value = null): Builder {
+            return $this->whereHasIn($relation, function ($query) use ($column, $operator, $value) {
+                $query->where($column, $operator, $value);
+            });
+        };
+    }
+
+    /**
+     * Add an "or where" clause to a relationship query.
+     *
+     * @return Closure
+     */
+    public function orWhereRelationIn(): Closure
+    {
+        return function ($relation, $column, $operator = null, $value = null): Builder {
+            return $this->orWhereHasIn($relation, function ($query) use ($column, $operator, $value) {
+                $query->where($column, $operator, $value);
+            });
+        };
+    }
+
+    /**
+     * Add a polymorphic relationship condition to the query with a where clause.
+     *
+     * @return Closure
+     */
+    public function whereMorphRelationIn(): Closure
+    {
+        return function ($relation, $types, $column, $operator = null, $value = null): Builder {
+            return $this->whereHasMorphIn($relation, $types, function ($query) use ($column, $operator, $value) {
+                $query->where($column, $operator, $value);
+            });
+        };
+    }
+
+    /**
+     * Add a polymorphic relationship condition to the query with an "or where" clause.
+     *
+     * @return Closure
+     */
+    public function orWhereMorphRelationIn(): Closure
+    {
+        return function ($relation, $types, $column, $operator = null, $value = null): Builder {
+            return $this->orWhereHasMorphIn($relation, $types, function ($query) use ($column, $operator, $value) {
+                $query->where($column, $operator, $value);
+            });
         };
     }
 

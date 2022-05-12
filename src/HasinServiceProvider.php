@@ -10,6 +10,9 @@ use Illuminate\Support\ServiceProvider;
 
 class HasinServiceProvider extends ServiceProvider
 {
+    /**
+     * @throws \ReflectionException
+     */
     public function register()
     {
         // Eloquent\Builder mixin, provides hasin series implementation.

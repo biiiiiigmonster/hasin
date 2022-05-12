@@ -264,6 +264,64 @@ namespace Illuminate\Database\Eloquent
             {
                 return $this;
             }
+
+            /**
+             * Add a basic where clause to a relationship query.
+             *
+             * @param  string  $relation
+             * @param  \Closure|string|array|\Illuminate\Database\Query\Expression  $column
+             * @param  mixed  $operator
+             * @param  mixed  $value
+             * @return \Illuminate\Database\Eloquent\Builder|static
+             */
+            public function whereRelationIn($relation, $column, $operator = null, $value = null)
+            {
+                return $this;
+            }
+
+            /**
+             * Add an "or where" clause to a relationship query.
+             *
+             * @param  string  $relation
+             * @param  \Closure|string|array|\Illuminate\Database\Query\Expression  $column
+             * @param  mixed  $operator
+             * @param  mixed  $value
+             * @return \Illuminate\Database\Eloquent\Builder|static
+             */
+            public function orWhereRelationIn($relation, $column, $operator = null, $value = null)
+            {
+                return $this;
+            }
+
+            /**
+             * Add a polymorphic relationship condition to the query with a where clause.
+             *
+             * @param  \Illuminate\Database\Eloquent\Relations\MorphTo|string  $relation
+             * @param  string|array  $types
+             * @param  \Closure|string|array|\Illuminate\Database\Query\Expression  $column
+             * @param  mixed  $operator
+             * @param  mixed  $value
+             * @return \Illuminate\Database\Eloquent\Builder|static
+             */
+            public function whereMorphRelationIn($relation, $types, $column, $operator = null, $value = null)
+            {
+                return $this;
+            }
+
+            /**
+             * Add a polymorphic relationship condition to the query with an "or where" clause.
+             *
+             * @param  \Illuminate\Database\Eloquent\Relations\MorphTo|string  $relation
+             * @param  string|array  $types
+             * @param  \Closure|string|array|\Illuminate\Database\Query\Expression  $column
+             * @param  mixed  $operator
+             * @param  mixed  $value
+             * @return \Illuminate\Database\Eloquent\Builder|static
+             */
+            public function orWhereMorphRelationIn($relation, $types, $column, $operator = null, $value = null)
+            {
+                return $this;
+            }
         }
     }
 }
