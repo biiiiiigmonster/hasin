@@ -23,8 +23,8 @@ The `hasin` is composer package based on `where in` syntax to query the relation
 # Installation
 | Laravel Version | Install command |
 | ---- | ---- |
-| Laravel 9 | ```bash composer require biiiiiigmonster/hasin:^2.0 ``` |
-| Laravel 5.5 ~ 8 | ```bash composer require biiiiiigmonster/hasin:^1.0 ``` |
+| Laravel 9 | ``` composer require biiiiiigmonster/hasin:^2.0 ``` |
+| Laravel 5.5 ~ 8 | ``` composer require biiiiiigmonster/hasin:^1.0 ``` |
 
 # Introductions
 
