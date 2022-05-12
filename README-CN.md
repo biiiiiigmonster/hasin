@@ -23,9 +23,10 @@
 
 ## 安装
 
-```bash
-composer require biiiiiigmonster/hasin
-```
+| Laravel 版本 | 安装命令 |
+| ---- | ---- |
+| Laravel 9 | ```bash composer require biiiiiigmonster/hasin:^2.0 ``` |
+| Laravel 5.5 ~ 8 | ```bash composer require biiiiiigmonster/hasin:^1.0 ``` |
 
 ## 简介
 
