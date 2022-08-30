@@ -10,15 +10,14 @@ namespace Illuminate\Database\Eloquent
             /**
              * Add a relationship count / whereIn condition to the query.
              *
-             * @param \Illuminate\Database\Eloquent\Relations\Relation|string $relation
-             * @param string                                                  $operator
-             * @param int                                                     $count
-             * @param string                                                  $boolean
-             * @param \Closure|null                                           $callback
+             * @param  \Illuminate\Database\Eloquent\Relations\Relation|string  $relation
+             * @param  string  $operator
+             * @param  int  $count
+             * @param  string  $boolean
+             * @param  \Closure|null  $callback
+             * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @throws \RuntimeException
-             *
-             * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
              */
@@ -30,10 +29,9 @@ namespace Illuminate\Database\Eloquent
             /**
              * Add a relationship count / whereIn condition to the query with an "or".
              *
-             * @param string $relation
-             * @param string $operator
-             * @param int    $count
-             *
+             * @param  string  $relation
+             * @param  string  $operator
+             * @param  int  $count
              * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
@@ -46,10 +44,9 @@ namespace Illuminate\Database\Eloquent
             /**
              * Add a relationship count / whereIn condition to the query.
              *
-             * @param string        $relation
-             * @param string        $boolean
-             * @param \Closure|null $callback
-             *
+             * @param  string  $relation
+             * @param  string  $boolean
+             * @param  \Closure|null  $callback
              * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
@@ -74,11 +71,10 @@ namespace Illuminate\Database\Eloquent
             /**
              * Add a relationship count / whereIn condition to the query with where clauses.
              *
-             * @param string        $relation
-             * @param \Closure|null $callback
-             * @param string        $operator
-             * @param int           $count
-             *
+             * @param  string  $relation
+             * @param  \Closure|null  $callback
+             * @param  string  $operator
+             * @param  int  $count
              * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
@@ -91,11 +87,10 @@ namespace Illuminate\Database\Eloquent
             /**
              * Add a relationship count / whereIn condition to the query with where clauses and an "or".
              *
-             * @param string        $relation
-             * @param \Closure|null $callback
-             * @param string        $operator
-             * @param int           $count
-             *
+             * @param  string  $relation
+             * @param  \Closure|null  $callback
+             * @param  string  $operator
+             * @param  int  $count
              * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
@@ -108,9 +103,8 @@ namespace Illuminate\Database\Eloquent
             /**
              * Add a relationship count / whereIn condition to the query with where clauses.
              *
-             * @param string        $relation
-             * @param \Closure|null $callback
-             *
+             * @param  string  $relation
+             * @param  \Closure|null  $callback
              * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
@@ -123,9 +117,8 @@ namespace Illuminate\Database\Eloquent
             /**
              * Add a relationship count / whereIn condition to the query with where clauses and an "or".
              *
-             * @param string        $relation
-             * @param \Closure|null $callback
-             *
+             * @param  string  $relation
+             * @param  \Closure|null  $callback
              * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
@@ -138,13 +131,12 @@ namespace Illuminate\Database\Eloquent
             /**
              * Add a polymorphic relationship count / whereIn condition to the query.
              *
-             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
-             * @param string|array                                           $types
-             * @param string                                                 $operator
-             * @param int                                                    $count
-             * @param string                                                 $boolean
-             * @param \Closure|null                                          $callback
-             *
+             * @param  \Illuminate\Database\Eloquent\Relations\MorphTo|string  $relation
+             * @param  string|array  $types
+             * @param  string  $operator
+             * @param  int  $count
+             * @param  string  $boolean
+             * @param  \Closure|null  $callback
              * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
@@ -157,11 +149,10 @@ namespace Illuminate\Database\Eloquent
             /**
              * Add a polymorphic relationship count / whereIn condition to the query with an "or".
              *
-             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
-             * @param string|array                                           $types
-             * @param string                                                 $operator
-             * @param int                                                    $count
-             *
+             * @param  \Illuminate\Database\Eloquent\Relations\MorphTo|string  $relation
+             * @param  string|array  $types
+             * @param  string  $operator
+             * @param  int  $count
              * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
@@ -174,11 +165,10 @@ namespace Illuminate\Database\Eloquent
             /**
              * Add a polymorphic relationship count / whereIn condition to the query.
              *
-             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
-             * @param string|array                                           $types
-             * @param string                                                 $boolean
-             * @param \Closure|null                                          $callback
-             *
+             * @param  \Illuminate\Database\Eloquent\Relations\MorphTo|string  $relation
+             * @param  string|array  $types
+             * @param  string  $boolean
+             * @param  \Closure|null  $callback
              * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
@@ -191,9 +181,8 @@ namespace Illuminate\Database\Eloquent
             /**
              * Add a polymorphic relationship count / whereIn condition to the query with an "or".
              *
-             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
-             * @param string|array                                           $types
-             *
+             * @param  \Illuminate\Database\Eloquent\Relations\MorphTo|string  $relation
+             * @param  string|array  $types
              * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
@@ -218,12 +207,11 @@ namespace Illuminate\Database\Eloquent
             /**
              * Add a polymorphic relationship count / whereIn condition to the query with where clauses.
              *
-             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
-             * @param string|array                                           $types
-             * @param \Closure|null                                          $callback
-             * @param string                                                 $operator
-             * @param int                                                    $count
-             *
+             * @param  \Illuminate\Database\Eloquent\Relations\MorphTo|string  $relation
+             * @param  string|array  $types
+             * @param  \Closure|null  $callback
+             * @param  string  $operator
+             * @param  int  $count
              * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
@@ -236,10 +224,9 @@ namespace Illuminate\Database\Eloquent
             /**
              * Add a polymorphic relationship count / whereIn condition to the query with where clauses.
              *
-             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
-             * @param string|array                                           $types
-             * @param \Closure|null                                          $callback
-             *
+             * @param  \Illuminate\Database\Eloquent\Relations\MorphTo|string  $relation
+             * @param  string|array  $types
+             * @param  \Closure|null  $callback
              * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
@@ -252,10 +239,9 @@ namespace Illuminate\Database\Eloquent
             /**
              * Add a polymorphic relationship count / whereIn condition to the query with where clauses and an "or".
              *
-             * @param \Illuminate\Database\Eloquent\Relations\MorphTo|string $relation
-             * @param string|array                                           $types
-             * @param \Closure|null                                          $callback
-             *
+             * @param  \Illuminate\Database\Eloquent\Relations\MorphTo|string  $relation
+             * @param  string|array  $types
+             * @param  \Closure|null  $callback
              * @return \Illuminate\Database\Eloquent\Builder|static
              *
              * @see \BiiiiiigMonster\Hasin\Database\Eloquent\BuilderMixin
