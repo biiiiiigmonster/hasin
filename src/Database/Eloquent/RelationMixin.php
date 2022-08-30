@@ -39,12 +39,12 @@ class RelationMixin
             $hasManyThrough = function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder {
                 $columns = $columns == ['*'] ? $this->getQualifiedFirstKeyName() : $columns;
                 if ($parentQuery->getQuery()->from === $this->throughParent->getTable()) {
-                    $table = $this->throughParent->getTable() . ' as ' . $hash = $this->getRelationCountHash();
+                    $table = $this->throughParent->getTable().' as '.$hash = $this->getRelationCountHash();
 
-                    $query->join($table, $hash . '.' . $this->secondLocalKey, '=', $this->getQualifiedFarKeyName());
+                    $query->join($table, $hash.'.'.$this->secondLocalKey, '=', $this->getQualifiedFarKeyName());
 
                     if ($this->throughParentSoftDeletes()) {
-                        $query->whereNull($hash . '.' . $this->throughParent->getDeletedAtColumn());
+                        $query->whereNull($hash.'.'.$this->throughParent->getDeletedAtColumn());
                     }
 
                     return $query->select($columns);
@@ -59,11 +59,13 @@ class RelationMixin
                 HasOne::class, HasMany::class, => $hasOneOrMany($query, $parentQuery, $columns),
                 BelongsTo::class, MorphTo::class => $belongsTo($query, $parentQuery, $columns),
                 MorphOne::class, MorphMany::class => $hasOneOrMany($query, $parentQuery, $columns)->where(
-                    $query->qualifyColumn($this->getMorphType()), $this->morphClass
+                    $query->qualifyColumn($this->getMorphType()),
+                    $this->morphClass
                 ),
                 BelongsToMany::class => $belongsToMany($query, $parentQuery, $columns),
                 MorphToMany::class => $belongsToMany($query, $parentQuery, $columns)->where(
-                    $this->table . '.' . $this->morphType, $this->morphClass
+                    $this->table.'.'.$this->morphType,
+                    $this->morphClass
                 ),
                 HasOneThrough::class, HasManyThrough::class => $hasManyThrough($query, $parentQuery, $columns),
                 default => throw new LogicException(
@@ -77,7 +79,7 @@ class RelationMixin
 
     public function getRelationWhereInKey(): Closure
     {
-        return fn(): string => match ($this::class) {
+        return fn (): string => match ($this::class) {
             BelongsTo::class, MorphTo::class => $this->getQualifiedForeignKeyName(),
             HasOne::class, HasMany::class, BelongsToMany::class,
             MorphMany::class, MorphOne::class, MorphToMany::class => $this->getQualifiedParentKeyName(),

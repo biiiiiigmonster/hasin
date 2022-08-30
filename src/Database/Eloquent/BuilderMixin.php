@@ -38,7 +38,8 @@ class BuilderMixin
                             : 'getRelationExistenceCountQuery';
 
             $hasInQuery = $relation->{$method}(
-                $relation->getRelated()->newQueryWithoutRelationships(), $this
+                $relation->getRelated()->newQueryWithoutRelationships(),
+                $this
             );
 
             // Next we will call any given callback as an "anonymous" scope so they can get the
@@ -49,7 +50,11 @@ class BuilderMixin
             }
 
             return $this->addHasInWhere(
-                $hasInQuery, $relation, $operator, $count, $boolean
+                $hasInQuery,
+                $relation,
+                $operator,
+                $count,
+                $boolean
             );
         };
     }
@@ -191,7 +196,7 @@ class BuilderMixin
                 $relation = $this->getRelationWithoutConstraints($relation);
             }
 
-            $types = (array)$types;
+            $types = (array) $types;
 
             if ($types === ['*']) {
                 $types = $this->model->newModelQuery()->distinct()->pluck($relation->getMorphType())->filter()->all();
@@ -212,7 +217,7 @@ class BuilderMixin
                             };
                         }
 
-                        $query->where($this->qualifyColumn($relation->getMorphType()), '=', (new $type)->getMorphClass())
+                        $query->where($this->qualifyColumn($relation->getMorphType()), '=', (new $type())->getMorphClass())
                             ->whereHasIn($belongsTo, $callback, $operator, $count);
                     });
                 }
