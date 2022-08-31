@@ -62,7 +62,7 @@ return new class () extends Migration {
             $table->string('name')->default('');
             $table->timestamps();
         });
-        Schema::create('taggable', function (Blueprint $table) {
+        Schema::create('taggables', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('tag_id')->default(0);
             $table->morphs('taggable');
@@ -104,7 +104,7 @@ return new class () extends Migration {
         Schema::dropIfExists('role_user');
         Schema::dropIfExists('suppliers');
         Schema::dropIfExists('tags');
-        Schema::dropIfExists('taggable');
+        Schema::dropIfExists('taggables');
         Schema::dropIfExists('users');
         Schema::dropIfExists('videos');
         Schema::dropIfExists('posts');
