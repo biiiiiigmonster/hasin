@@ -32,36 +32,39 @@ class TestCase extends Orchestra
 
     protected function defineDatabaseMigrations()
     {
+        $this->migration->down();
         $this->migration->up();
     }
 
     protected function destroyDatabaseMigrations()
     {
-        $this->migration->down();
+//        $this->migration->down();
     }
 
     protected function defineDatabaseSeeders()
     {
-        $tags = Tag::factory(4)->create();
-        $country = Country::factory(3)->create();
-        $supplier = Supplier::factory(3)->create();
+        $tags = Tag::factory(20)->create();
+        $countries = Country::factory(15)->create();
+        $suppliers = Supplier::factory(15)->create();
+        $roles = Role::factory(10)->create();
 
-        $postFactory = Post::factory(3)
-            ->has(Comment::factory(3))
-            ->has(Image::factory(2))
-            ->hasAttached($tags->random(3));
-
-        User::factory(3)
-            ->has($postFactory)
+        $users = User::factory(15)
             ->has(History::factory())
             ->has(Phone::factory())
             ->has(Image::factory(3))
-            ->hasAttached(Role::factory(3))
-            ->for($country->random())
-            ->for($supplier->random())
+            ->hasAttached($roles->random(5))
+            ->sequence(fn () => ['country_id' => $countries->pluck('id')->random()])
+            ->sequence(fn () => ['supplier_id' => $suppliers->pluck('id')->random()])
             ->create();
 
-        Video::factory(3)->hasAttached($tags->random(3))->create();
+        Post::factory(15)
+            ->sequence(fn () => ['user_id' => $users->pluck('id')->random()])
+            ->has(Comment::factory(3))
+            ->has(Image::factory(2))
+            ->hasAttached($tags->random(15))
+            ->create();
+
+        Video::factory(15)->hasAttached($tags->random(15))->create();
     }
 
     public function getEnvironmentSetUp($app)
