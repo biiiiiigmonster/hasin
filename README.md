@@ -127,6 +127,7 @@ User::hasIn('posts.comments')->get();
 ```bash
 composer test
 ```
+>**Tips**: before testing, you need to configure your database connection in the `phpunit.xml.dist`.
 
 # License
 [MIT](./LICENSE)
