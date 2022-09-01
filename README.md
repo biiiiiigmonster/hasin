@@ -123,5 +123,10 @@ Image::hasMorphIn('imageable', [Post::class, Comment::class])->get();
 User::hasIn('posts.comments')->get();
 ```
 
+# Testing
+```bash
+composer test
+```
+
 # License
 [MIT](./LICENSE)

@@ -14,15 +14,12 @@ test('whereDoesntHaveIn same as whereDoesntHave', function () {
 });
 
 test('nested whereDoesntHaveIn same as nested whereDoesntHave', function () {
-    $whereDoesntHave = User::whereDoesntHave('posts', function ($query) {
-        $query->where('votes', '>', 20)->whereDoesntHave('comments', function ($nestQuery) {
-            $nestQuery->where('status', '=', 2);
-        });
+    $whereDoesntHave = User::whereDoesntHave('posts.comments', function ($query) {
+        $query->where('status', '>', 2);
+        ;
     })->orderBy('id')->pluck('id');
-    $whereDoesntHaveIn = User::whereDoesntHaveIn('posts', function ($query) {
-        $query->where('votes', '>', 20)->whereDoesntHaveIn('comments', function ($nestQuery) {
-            $nestQuery->where('status', '=', 2);
-        });
+    $whereDoesntHaveIn = User::whereDoesntHaveIn('posts.comments', function ($query) {
+        $query->where('status', '>', 2);
     })->orderBy('id')->pluck('id');
 
     expect($whereDoesntHave)->toEqual($whereDoesntHaveIn);

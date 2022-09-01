@@ -32,13 +32,12 @@ class TestCase extends Orchestra
 
     protected function defineDatabaseMigrations()
     {
-        $this->migration->down();
         $this->migration->up();
     }
 
     protected function destroyDatabaseMigrations()
     {
-//        $this->migration->down();
+        $this->migration->down();
     }
 
     protected function defineDatabaseSeeders()
@@ -57,14 +56,21 @@ class TestCase extends Orchestra
             ->sequence(fn () => ['supplier_id' => $suppliers->pluck('id')->random()])
             ->create();
 
-        Post::factory(15)
+        $posts = Post::factory(15)
             ->sequence(fn () => ['user_id' => $users->pluck('id')->random()])
-            ->has(Comment::factory(3))
-            ->has(Image::factory(2))
             ->hasAttached($tags->random(15))
             ->create();
 
-        Video::factory(15)->hasAttached($tags->random(15))->create();
+        $videos = Video::factory(15)->hasAttached($tags->random(15))->create();
+
+        $posts->random(5)->map(function ($post) {
+            Comment::factory(3)->for($post, 'commentable')->create();
+            Image::factory(2)->for($post, 'imageable')->create();
+        });
+
+        $videos->random(5)->map(function ($video) {
+            Comment::factory(3)->for($video, 'commentable')->create();
+        });
     }
 
     public function getEnvironmentSetUp($app)
