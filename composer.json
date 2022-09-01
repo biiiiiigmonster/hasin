@@ -23,8 +23,7 @@
     "autoload": {
         "psr-4": {
             "BiiiiiigMonster\\Hasin\\": "src",
-            "BiiiiiigMonster\\Hasin\\Database\\Factories\\": "database/factories",
-            "Database\\Seeders\\": "database/seeders"
+            "BiiiiiigMonster\\Hasin\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
