@@ -325,7 +325,11 @@ class BuilderMixin
     {
         return function ($relation, $column, $operator = null, $value = null): Builder {
             return $this->whereHasIn($relation, function ($query) use ($column, $operator, $value) {
-                $query->where($column, $operator, $value);
+                if ($column instanceof Closure) {
+                    $column($query);
+                } else {
+                    $query->where($column, $operator, $value);
+                }
             });
         };
     }
@@ -339,7 +343,11 @@ class BuilderMixin
     {
         return function ($relation, $column, $operator = null, $value = null): Builder {
             return $this->orWhereHasIn($relation, function ($query) use ($column, $operator, $value) {
-                $query->where($column, $operator, $value);
+                if ($column instanceof Closure) {
+                    $column($query);
+                } else {
+                    $query->where($column, $operator, $value);
+                }
             });
         };
     }
