@@ -1,3 +1,10 @@
-/vendor/
 .idea
-/composer.lock
+.phpunit.result.cache
+build
+composer.lock
+coverage
+docs
+phpunit.xml
+testbench.yaml
+vendor
+node_modules

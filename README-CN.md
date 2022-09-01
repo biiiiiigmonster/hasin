@@ -126,6 +126,11 @@ Image::hasMorphIn('imageable', [Post::class, Comment::class])->get();
 User::hasIn('posts.comments')->get();
 ```
 
+## 测试
+```bash
+composer test
+```
+
 ## 联系交流
 wx：biiiiiigmonster(备注：hasin)
 

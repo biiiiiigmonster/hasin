@@ -14,11 +14,22 @@
         "laravel/framework": "^9"
     },
     "require-dev": {
-        "laravel/pint": "^1.1"
+        "laravel/pint": "^1.1",
+        "phpunit/phpunit": "^9",
+        "orchestra/testbench": "^7.7",
+        "pestphp/pest": "^1.22",
+        "pestphp/pest-plugin-laravel": "^1.2"
     },
     "autoload": {
         "psr-4": {
-            "BiiiiiigMonster\\Hasin\\": "src/"
+            "BiiiiiigMonster\\Hasin\\": "src",
+            "BiiiiiigMonster\\Hasin\\Database\\Factories\\": "database/factories",
+            "Database\\Seeders\\": "database/seeders"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BiiiiiigMonster\\Hasin\\Tests\\": "tests"
         }
     },
     "extra": {
@@ -27,5 +38,9 @@
                 "BiiiiiigMonster\\Hasin\\HasinServiceProvider"
             ]
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "format": "vendor/bin/pint"
     }
 }
