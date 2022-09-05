@@ -16,7 +16,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: laravel
         ports:
-        - 3306
+          - 33306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     strategy:
       fail-fast: true
@@ -53,6 +53,8 @@ jobs:
       - name: Execute tests
         run: vendor/bin/pest
         env:
+          DB_HOST: 127.0.0.1
           DB_DATABASE: laravel
+          DB_PORT: 33306
           DB_USERNAME: root
           DB_PASSWORD: root
