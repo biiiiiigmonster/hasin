@@ -13,7 +13,7 @@ jobs:
       fail-fast: true
       matrix:
         os: [ubuntu-latest, windows-latest]
-        php: [8.*]
+        php: [8.0]
         laravel: [9.*]
         stability: [prefer-lowest, prefer-stable]
         include:
@@ -40,8 +40,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer install --no-interaction --no-update
-          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+          composer install --prefer-dist --no-interaction
 
       - name: Execute tests
         run: vendor/bin/pest
