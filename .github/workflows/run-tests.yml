@@ -13,7 +13,7 @@ jobs:
       fail-fast: true
       matrix:
         os: [ubuntu-latest, windows-latest]
-        php: [8.0]
+        php: [8.0, 8.1]
         laravel: [9.*]
         stability: [prefer-lowest, prefer-stable]
         include:
@@ -40,6 +40,19 @@ jobs:
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction
+
+      - name: Setup MySQL
+          uses: mirromutth/mysql-action@v1.1
+          with:
+            host port: 3306
+            container port: 3306
+            character set server: 'utf8mb4'
+            collation server: 'utf8mb4_general_ci'
+            mysql version: '5.7'
+            mysql root password: 'root'
+            mysql database: 'laravel'
+            mysql user: 'root'
+            mysql password: 'root'
 
       - name: Execute tests
         run: vendor/bin/pest
