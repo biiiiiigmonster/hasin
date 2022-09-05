@@ -53,7 +53,5 @@ jobs:
       - name: Execute tests
         run: vendor/bin/pest
         env:
-          DB_DATABASE: laravel
           DB_PORT: 33306
-          DB_USERNAME: root
           DB_PASSWORD: root
