@@ -39,8 +39,16 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Install dependencies
-        run: |
-          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+        run: composer install --prefer-dist --no-interaction
+
+      - name: Setup MySQL
+          uses: mirromutth/mysql-action@v1.1
+          with:
+            mysql version: 5.7
+            mysql root password: root
+            mysql database: laravel
+            mysql user: root
+            mysql password: root
 
       - name: Execute tests
         run: vendor/bin/pest
