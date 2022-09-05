@@ -13,7 +13,7 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: laravel
         ports:
           - 33306:3306
@@ -53,5 +53,6 @@ jobs:
       - name: Execute tests
         run: vendor/bin/pest
         env:
-          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+          DB_DATABASE: laravel
           DB_USERNAME: root
+          DB_PASSWORD: root
