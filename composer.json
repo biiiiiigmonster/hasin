@@ -41,5 +41,11 @@
     "scripts": {
         "test": "vendor/bin/pest",
         "format": "vendor/bin/pint"
-    }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
