@@ -42,13 +42,17 @@ jobs:
         run: composer install --prefer-dist --no-interaction
 
       - name: Setup MySQL
-          uses: mirromutth/mysql-action@v1.1
-          with:
-            mysql version: 5.7
-            mysql root password: 123456
-            mysql database: laravel
-            mysql user: root
-            mysql password: 123456
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          host port: 3306
+          container port: 3306
+          character set server: utf8mb4
+          collation server: utf8mb4_general_ci
+          mysql version: 5.7
+          mysql root password: root
+          mysql database: laravel
+          mysql user: root
+          mysql password: root
 
       - name: Execute tests
         run: vendor/bin/pest
