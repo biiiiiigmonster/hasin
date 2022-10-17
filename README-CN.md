@@ -27,7 +27,7 @@
 `Laravel ORM`的关联关系非常强大，基于关联关系的查询`has`也给我们提供了诸多灵活的调用方式，然而某些情形下，`has`使用了**where exists**语法实现
 
 例如:
-```injectablephp
+```php
 // User hasMany Post
 User::has('posts')->get();
 ```
@@ -41,7 +41,7 @@ User::has('posts')->get();
 
 因此在代码中使用`has(hasMorph)`或者`hasIn(hasMorphIn)`应由**数据体量**来决定……
 
-```injectablephp
+```php
 /**
  * SQL:
  * 
@@ -76,7 +76,7 @@ $users = User::hasIn('posts')->paginate(10);
 
 > hasIn
 
-```injectablephp
+```php
 // hasIn
 User::hasIn('posts')->get();
 
@@ -92,7 +92,7 @@ User::where('age', '>', 18)->orDoesntHaveIn('posts')->get();
 
 > whereHasIn
 
-```injectablephp
+```php
 // whereHasIn
 User::whereHasIn('posts', function ($query) {
     $query->where('votes', '>', 10);
@@ -116,13 +116,13 @@ User::where('age', '>', 18)->orWhereDoesntHaveIn('posts', function ($query) {
 
 > hasMorphIn
 
-```injectablephp
+```php
 Image::hasMorphIn('imageable', [Post::class, Comment::class])->get();
 ```
 
 ### 嵌套关联
 
-```injectablephp
+```php
 User::hasIn('posts.comments')->get();
 ```
 
