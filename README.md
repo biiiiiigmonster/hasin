@@ -26,7 +26,7 @@ The `hasin` is composer package based on `where in` syntax to query the relation
 The relationship of `laravel ORM` is very powerful, and the query `has` based on the relationship also provides us with many flexible calling methods. However, in some cases, `has` is implemented with **where exists** syntax.
 
 For example:
-```injectablephp
+```php
 // User hasMany Post
 User::has('posts')->get();
 ```
@@ -40,7 +40,7 @@ However, when the **User** has a large amount of data, there will be performance
 
 Therefore, the use of `has(hasMorph)` or `hasIn(hasMorphIn)` in code should be determined by **data size**
 
-```injectablephp
+```php
 /**
  * SQL:
  * 
@@ -73,7 +73,7 @@ $users = User::hasIn('posts')->paginate(10);
 
 > hasIn
 
-```injectablephp
+```php
 // hasIn
 User::hasIn('posts')->get();
 
@@ -89,7 +89,7 @@ User::where('age', '>', 18)->orDoesntHaveIn('posts')->get();
 
 > whereHasIn
 
-```injectablephp
+```php
 // whereHasIn
 User::whereHasIn('posts', function ($query) {
     $query->where('votes', '>', 10);
@@ -113,13 +113,13 @@ User::where('age', '>', 18)->orWhereDoesntHaveIn('posts', function ($query) {
 
 > hasMorphIn
 
-```injectablephp
+```php
 Image::hasMorphIn('imageable', [Post::class, Comment::class])->get();
 ```
 
 ### Nested Relation
 
-```injectablephp
+```php
 User::hasIn('posts.comments')->get();
 ```
 
