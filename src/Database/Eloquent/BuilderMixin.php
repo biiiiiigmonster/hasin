@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Str;
 
 class BuilderMixin
 {
@@ -141,6 +142,22 @@ class BuilderMixin
         return function ($relation, Closure $callback = null, $operator = '>=', $count = 1): Builder {
             /** @var Builder $this */
             return $this->hasIn($relation, $operator, $count, 'and', $callback);
+        };
+    }
+
+    /**
+     * Add a relationship count / exists condition to the query with whereIn clauses.
+     *
+     * Also load the relationship with same condition.
+     *
+     * @return Closure
+     */
+    public function withWhereHasIn(): Closure
+    {
+        return function ($relation, Closure $callback = null, $operator = '>=', $count = 1): Builder {
+            /** @var Builder $this */
+            return $this->whereHasIn(Str::before($relation, ':'), $callback, $operator, $count)
+                ->with($callback ? [$relation => fn ($query) => $callback($query)] : $relation);
         };
     }
 
