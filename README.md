@@ -16,9 +16,10 @@ English | [中文](./README-CN.md)
 The `hasin` is composer package based on `where in` syntax to query the relationship of `laravel ORM`, which can replace `has` based on `where exists` syntax in some business scenarios to obtain higher performance.
 
 # Installation
-| Laravel Version | Install command |
-| ---- | ---- |
-| Laravel 9 | ``` composer require biiiiiigmonster/hasin:^2.0 ``` |
+| Laravel Version | Install command                                     |
+|-----------------|-----------------------------------------------------|
+| Laravel 10      | ``` composer require biiiiiigmonster/hasin:^3.0 ``` |
+| Laravel 9       | ``` composer require biiiiiigmonster/hasin:^2.0 ``` |
 | Laravel 5.5 ~ 8 | ``` composer require biiiiiigmonster/hasin:^1.0 ``` |
 
 # Introductions
