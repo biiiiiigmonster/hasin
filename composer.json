@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "laravel/framework": "^9"
+        "laravel/framework": "^10"
     },
     "require-dev": {
         "laravel/pint": "^1.1",
