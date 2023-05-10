@@ -21,59 +21,98 @@ class RelationMixin
     public function getRelationExistenceInQuery(): Closure
     {
         return function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder {
-            $hasOneOrMany = function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder {
-                $columns = $columns == ['*'] ? $this->getExistenceCompareKey() : $columns;
-
-                return $query->select($columns);
+            $relation = function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder {
+                return $query->select($columns)->whereColumn(
+                    $this->getQualifiedParentKeyName(), '=', $this->getExistenceCompareKey()
+                );
             };
             $belongsTo = function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder {
-                $columns = $columns == ['*'] ? $query->qualifyColumn($this->ownerKey) : $columns;
+                if ($parentQuery->getQuery()->from == $query->getQuery()->from) {
+                    return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
+                }
 
-                return $query->select($columns);
+                return $query->select($columns)->whereColumn(
+                    $this->getQualifiedForeignKeyName(), '=', $query->qualifyColumn($this->ownerKey)
+                );
             };
-            $belongsToMany = function (Builder $query, Builder $parentQuery, $columns = ['*']) use ($hasOneOrMany): Builder {
-                $this->performJoin($query);
-
-                return $hasOneOrMany($query, $parentQuery, $columns);
-            };
-            $hasManyThrough = function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder {
-                $columns = $columns == ['*'] ? $this->getQualifiedFirstKeyName() : $columns;
-                if ($parentQuery->getQuery()->from === $this->throughParent->getTable()) {
-                    $table = $this->throughParent->getTable().' as '.$hash = $this->getRelationCountHash();
-
-                    $query->join($table, $hash.'.'.$this->secondLocalKey, '=', $this->getQualifiedFarKeyName());
-
-                    if ($this->throughParentSoftDeletes()) {
-                        $query->whereNull($hash.'.'.$this->throughParent->getDeletedAtColumn());
-                    }
-
-                    return $query->select($columns);
+            $belongsToMany = function (Builder $query, Builder $parentQuery, $columns = ['*']) use ($relation): Builder {
+                if ($parentQuery->getQuery()->from == $query->getQuery()->from) {
+                    return $this->getRelationExistenceQueryForSelfJoin($query, $parentQuery, $columns);
                 }
 
                 $this->performJoin($query);
 
-                return $query->select($columns);
+                return $relation($query, $parentQuery, $columns);
+            };
+            $hasOneOrMany = function (Builder $query, Builder $parentQuery, $columns = ['*']) use ($relation): Builder {
+                if ($query->getQuery()->from == $parentQuery->getQuery()->from) {
+                    return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
+                }
+
+                return $relation($query, $parentQuery, $columns);
+            };
+            $hasOne = function (Builder $query, Builder $parentQuery, $columns = ['*']) use ($hasOneOrMany): Builder {
+                if ($this->isOneOfMany()) {
+                    $this->mergeOneOfManyJoinsTo($query);
+                }
+
+                return $hasOneOrMany($query, $parentQuery, $columns);
+            };
+            $morphOneOrMany = function (Builder $query, Builder $parentQuery, $columns = ['*']) use ($hasOneOrMany): Builder {
+                return $hasOneOrMany($query, $parentQuery, $columns)->where(
+                    $query->qualifyColumn($this->getMorphType()), $this->morphClass
+                );
+            };
+            $morphOne = function (Builder $query, Builder $parentQuery, $columns = ['*']) use ($morphOneOrMany): Builder {
+                if ($this->isOneOfMany()) {
+                    $this->mergeOneOfManyJoinsTo($query);
+                }
+
+                return $morphOneOrMany($query, $parentQuery, $columns);
+            };
+            $belongsToMany = function (Builder $query, Builder $parentQuery, $columns = ['*']) use ($relation): Builder {
+                if ($parentQuery->getQuery()->from == $query->getQuery()->from) {
+                    return $this->getRelationExistenceQueryForSelfJoin($query, $parentQuery, $columns);
+                }
+
+                $this->performJoin($query);
+
+                return $relation($query, $parentQuery, $columns);
+            };
+            $morphToMany = function (Builder $query, Builder $parentQuery, $columns = ['*']) use ($belongsToMany): Builder {
+                return $belongsToMany($query, $parentQuery, $columns)->where(
+                    $this->qualifyPivotColumn($this->morphType), $this->morphClass
+                );
+            };
+            $hasManyThrough = function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder {
+                if ($parentQuery->getQuery()->from === $query->getQuery()->from) {
+                    return $this->getRelationExistenceQueryForSelfRelation($query, $parentQuery, $columns);
+                }
+
+                if ($parentQuery->getQuery()->from === $this->throughParent->getTable()) {
+                    return $this->getRelationExistenceQueryForThroughSelfRelation($query, $parentQuery, $columns);
+                }
+
+                $this->performJoin($query);
+
+                return $query->select($columns)->whereColumn(
+                    $this->getQualifiedLocalKeyName(), '=', $this->getQualifiedFirstKeyName()
+                );
             };
 
-            $builder = match ($this::class) {
-                HasOne::class, HasMany::class, => $hasOneOrMany($query, $parentQuery, $columns),
+            return match ($this::class) {
+                MorphMany::class => $morphOneOrMany($query, $parentQuery, $columns),
                 BelongsTo::class, MorphTo::class => $belongsTo($query, $parentQuery, $columns),
-                MorphOne::class, MorphMany::class => $hasOneOrMany($query, $parentQuery, $columns)->where(
-                    $query->qualifyColumn($this->getMorphType()),
-                    $this->morphClass
-                ),
+                HasMany::class, => $hasOneOrMany($query, $parentQuery, $columns),
+                HasOne::class => $hasOne($query, $parentQuery, $columns),
+                MorphOne::class => $morphOne($query, $parentQuery, $columns),
                 BelongsToMany::class => $belongsToMany($query, $parentQuery, $columns),
-                MorphToMany::class => $belongsToMany($query, $parentQuery, $columns)->where(
-                    $this->table.'.'.$this->morphType,
-                    $this->morphClass
-                ),
+                MorphToMany::class => $morphToMany($query, $parentQuery, $columns),
                 HasOneThrough::class, HasManyThrough::class => $hasManyThrough($query, $parentQuery, $columns),
                 default => throw new LogicException(
                     sprintf('%s must be a relationship instance.', $this::class)
                 )
             };
-
-            return $builder->distinct();
         };
     }
 
