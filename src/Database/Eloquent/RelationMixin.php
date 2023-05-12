@@ -72,7 +72,8 @@ class RelationMixin
             };
             $morphOneOrMany = function (Builder $query, Builder $parentQuery) use ($hasOneOrMany): Builder {
                 return $hasOneOrMany($query, $parentQuery)->where(
-                    $query->qualifyColumn($this->getMorphType()), $this->morphClass
+                    $query->qualifyColumn($this->getMorphType()),
+                    $this->morphClass
                 );
             };
             $morphOne = function (Builder $query, Builder $parentQuery) use ($morphOneOrMany): Builder {
@@ -84,7 +85,8 @@ class RelationMixin
             };
             $morphToMany = function (Builder $query, Builder $parentQuery) use ($belongsToMany): Builder {
                 return $belongsToMany($query, $parentQuery)->where(
-                    $this->qualifyPivotColumn($this->morphType), $this->morphClass
+                    $this->qualifyPivotColumn($this->morphType),
+                    $this->morphClass
                 );
             };
             $hasManyThrough = function (Builder $query, Builder $parentQuery) use ($relation): Builder {
