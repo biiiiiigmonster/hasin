@@ -19,6 +19,7 @@
 
 | Laravel 版本      | 安装命令                                                |
 |-----------------|-----------------------------------------------------|
+| Laravel 10      | ``` composer require biiiiiigmonster/hasin:^3.0 ``` |
 | Laravel 9       | ``` composer require biiiiiigmonster/hasin:^2.0 ``` |
 | Laravel 5.5 ~ 8 | ``` composer require biiiiiigmonster/hasin:^1.0 ``` |
 
