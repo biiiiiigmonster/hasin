@@ -1,0 +1,23 @@
+checks:
+  php:
+    code_rating: true
+    remove_extra_empty_lines: true
+    remove_php_closing_tag: true
+    remove_trailing_whitespace: true
+    fix_use_statements:
+      remove_unused: true
+      preserve_multiple: false
+      preserve_blanklines: true
+      order_alphabetically: true
+    fix_linefeed: true
+    fix_line_ending: true
+    fix_identation_4spaces: true
+
+build:
+  image: default-bionic
+  environment:
+    php:
+      version: 8.1
+  tests:
+    override:
+      - command: './vendor/bin/pest'
