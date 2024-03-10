@@ -122,15 +122,15 @@ class RelationMixin
                 return $relation($query, $parentQuery, $columns);
             };
 
-            return match ($this::class) {
-                MorphMany::class => $morphOneOrMany($query, $parentQuery),
-                BelongsTo::class, MorphTo::class => $belongsTo($query, $parentQuery),
-                HasMany::class, => $hasOneOrMany($query, $parentQuery),
-                HasOne::class => $hasOne($query, $parentQuery),
-                MorphOne::class => $morphOne($query, $parentQuery),
-                BelongsToMany::class => $belongsToMany($query, $parentQuery),
-                MorphToMany::class => $morphToMany($query, $parentQuery),
-                HasOneThrough::class, HasManyThrough::class => $hasManyThrough($query, $parentQuery),
+            return match (true) {
+                $this instanceof MorphMany => $morphOneOrMany($query, $parentQuery),
+                $this instanceof BelongsTo, $this instanceof MorphTo => $belongsTo($query, $parentQuery),
+                $this instanceof HasMany => $hasOneOrMany($query, $parentQuery),
+                $this instanceof HasOne => $hasOne($query, $parentQuery),
+                $this instanceof MorphOne => $morphOne($query, $parentQuery),
+                $this instanceof BelongsToMany => $belongsToMany($query, $parentQuery),
+                $this instanceof MorphToMany => $morphToMany($query, $parentQuery),
+                $this instanceof HasOneThrough, $this instanceof HasManyThrough => $hasManyThrough($query, $parentQuery),
                 default => throw new LogicException(
                     sprintf('%s must be a relationship instance.', $this::class)
                 )
@@ -140,11 +140,11 @@ class RelationMixin
 
     public function getRelationWhereInKey(): Closure
     {
-        return fn (): string => match ($this::class) {
-            BelongsTo::class, MorphTo::class => $this->getQualifiedForeignKeyName(),
-            HasOne::class, HasMany::class, BelongsToMany::class,
-            MorphMany::class, MorphOne::class, MorphToMany::class => $this->getQualifiedParentKeyName(),
-            HasOneThrough::class, HasManyThrough::class => $this->getQualifiedLocalKeyName(),
+        return fn (): string => match (true) {
+            $this instanceof BelongsTo, $this instanceof MorphTo => $this->getQualifiedForeignKeyName(),
+            $this instanceof HasOne, $this instanceof HasMany, $this instanceof BelongsToMany,
+            $this instanceof MorphMany, $this instanceof MorphOne, $this instanceof MorphToMany => $this->getQualifiedParentKeyName(),
+            $this instanceof HasOneThrough, $this instanceof HasManyThrough => $this->getQualifiedLocalKeyName(),
             default => throw new LogicException(
                 sprintf('%s must be a relationship instance.', $this::class)
             )
