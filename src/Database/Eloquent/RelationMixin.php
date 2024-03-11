@@ -6,13 +6,12 @@ use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use LogicException;
 
@@ -123,14 +122,14 @@ class RelationMixin
             };
 
             return match (true) {
-                $this instanceof MorphMany => $morphOneOrMany($query, $parentQuery),
-                $this instanceof BelongsTo, $this instanceof MorphTo => $belongsTo($query, $parentQuery),
-                $this instanceof HasMany => $hasOneOrMany($query, $parentQuery),
-                $this instanceof HasOne => $hasOne($query, $parentQuery),
                 $this instanceof MorphOne => $morphOne($query, $parentQuery),
-                $this instanceof BelongsToMany => $belongsToMany($query, $parentQuery),
+                $this instanceof MorphOneOrMany => $morphOneOrMany($query, $parentQuery),
+                $this instanceof BelongsTo => $belongsTo($query, $parentQuery),
                 $this instanceof MorphToMany => $morphToMany($query, $parentQuery),
-                $this instanceof HasOneThrough, $this instanceof HasManyThrough => $hasManyThrough($query, $parentQuery),
+                $this instanceof HasOneOrMany => $hasOneOrMany($query, $parentQuery),
+                $this instanceof HasOne => $hasOne($query, $parentQuery),
+                $this instanceof HasManyThrough => $hasManyThrough($query, $parentQuery),
+                $this instanceof BelongsToMany => $belongsToMany($query, $parentQuery),
                 default => throw new LogicException(
                     sprintf('%s must be a relationship instance.', $this::class)
                 )
@@ -141,10 +140,9 @@ class RelationMixin
     public function getRelationWhereInKey(): Closure
     {
         return fn (): string => match (true) {
-            $this instanceof BelongsTo, $this instanceof MorphTo => $this->getQualifiedForeignKeyName(),
-            $this instanceof HasOne, $this instanceof HasMany, $this instanceof BelongsToMany,
-            $this instanceof MorphMany, $this instanceof MorphOne, $this instanceof MorphToMany => $this->getQualifiedParentKeyName(),
-            $this instanceof HasOneThrough, $this instanceof HasManyThrough => $this->getQualifiedLocalKeyName(),
+            $this instanceof BelongsTo => $this->getQualifiedForeignKeyName(),
+            $this instanceof HasOneOrMany, $this instanceof BelongsToMany => $this->getQualifiedParentKeyName(),
+            $this instanceof HasOneThrough => $this->getQualifiedLocalKeyName(),
             default => throw new LogicException(
                 sprintf('%s must be a relationship instance.', $this::class)
             )
