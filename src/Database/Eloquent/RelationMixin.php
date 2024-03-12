@@ -23,6 +23,7 @@ class RelationMixin
             $relation = function (Builder $query, Builder $parentQuery, $columns = ['*']): Builder {
                 return $query->select($columns);
             };
+            // basic builder
             $belongsTo = function (Builder $query, Builder $parentQuery) use ($relation): Builder {
                 $columns = $query->qualifyColumn($this->ownerKey);
 
@@ -62,32 +63,6 @@ class RelationMixin
 
                 return $relation($query, $parentQuery, $columns);
             };
-            $hasOne = function (Builder $query, Builder $parentQuery) use ($hasOneOrMany): Builder {
-                if ($this->isOneOfMany()) {
-                    $this->mergeOneOfManyJoinsTo($query);
-                }
-
-                return $hasOneOrMany($query, $parentQuery);
-            };
-            $morphOneOrMany = function (Builder $query, Builder $parentQuery) use ($hasOneOrMany): Builder {
-                return $hasOneOrMany($query, $parentQuery)->where(
-                    $query->qualifyColumn($this->getMorphType()),
-                    $this->morphClass
-                );
-            };
-            $morphOne = function (Builder $query, Builder $parentQuery) use ($morphOneOrMany): Builder {
-                if ($this->isOneOfMany()) {
-                    $this->mergeOneOfManyJoinsTo($query);
-                }
-
-                return $morphOneOrMany($query, $parentQuery);
-            };
-            $morphToMany = function (Builder $query, Builder $parentQuery) use ($belongsToMany): Builder {
-                return $belongsToMany($query, $parentQuery)->where(
-                    $this->qualifyPivotColumn($this->morphType),
-                    $this->morphClass
-                );
-            };
             $hasManyThrough = function (Builder $query, Builder $parentQuery) use ($relation): Builder {
                 $columns = $this->getQualifiedFirstKeyName();
                 if ($parentQuery->getQuery()->from === $query->getQuery()->from) {
@@ -120,16 +95,45 @@ class RelationMixin
 
                 return $relation($query, $parentQuery, $columns);
             };
+            // extended builder
+            $hasOne = function (Builder $query, Builder $parentQuery) use ($hasOneOrMany): Builder {
+                if ($this->isOneOfMany()) {
+                    $this->mergeOneOfManyJoinsTo($query);
+                }
+
+                return $hasOneOrMany($query, $parentQuery);
+            };
+            $morphOneOrMany = function (Builder $query, Builder $parentQuery) use ($hasOneOrMany): Builder {
+                return $hasOneOrMany($query, $parentQuery)->where(
+                    $query->qualifyColumn($this->getMorphType()),
+                    $this->morphClass
+                );
+            };
+            $morphOne = function (Builder $query, Builder $parentQuery) use ($morphOneOrMany): Builder {
+                if ($this->isOneOfMany()) {
+                    $this->mergeOneOfManyJoinsTo($query);
+                }
+
+                return $morphOneOrMany($query, $parentQuery);
+            };
+            $morphToMany = function (Builder $query, Builder $parentQuery) use ($belongsToMany): Builder {
+                return $belongsToMany($query, $parentQuery)->where(
+                    $this->qualifyPivotColumn($this->morphType),
+                    $this->morphClass
+                );
+            };
 
             return match (true) {
+                // extended relation
+                $this instanceof HasOne => $hasOne($query, $parentQuery),
                 $this instanceof MorphOne => $morphOne($query, $parentQuery),
                 $this instanceof MorphOneOrMany => $morphOneOrMany($query, $parentQuery),
-                $this instanceof BelongsTo => $belongsTo($query, $parentQuery),
                 $this instanceof MorphToMany => $morphToMany($query, $parentQuery),
-                $this instanceof HasOneOrMany => $hasOneOrMany($query, $parentQuery),
-                $this instanceof HasOne => $hasOne($query, $parentQuery),
-                $this instanceof HasManyThrough => $hasManyThrough($query, $parentQuery),
+                // basic relation
+                $this instanceof BelongsTo => $belongsTo($query, $parentQuery),
                 $this instanceof BelongsToMany => $belongsToMany($query, $parentQuery),
+                $this instanceof HasOneOrMany => $hasOneOrMany($query, $parentQuery),
+                $this instanceof HasManyThrough => $hasManyThrough($query, $parentQuery),
                 default => throw new LogicException(
                     sprintf('%s must be a relationship instance.', $this::class)
                 )
@@ -142,7 +146,7 @@ class RelationMixin
         return fn (): string => match (true) {
             $this instanceof BelongsTo => $this->getQualifiedForeignKeyName(),
             $this instanceof HasOneOrMany, $this instanceof BelongsToMany => $this->getQualifiedParentKeyName(),
-            $this instanceof HasOneThrough => $this->getQualifiedLocalKeyName(),
+            $this instanceof HasManyThrough => $this->getQualifiedLocalKeyName(),
             default => throw new LogicException(
                 sprintf('%s must be a relationship instance.', $this::class)
             )
