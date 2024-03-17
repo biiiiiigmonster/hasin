@@ -2,9 +2,9 @@ name: run-tests
 
 on:
   push:
-    branches: [master]
+    branches: [laravel-11]
   pull_request:
-    branches: [master]
+    branches: [laravel-11]
 
 jobs:
   test:
