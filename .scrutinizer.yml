@@ -17,7 +17,7 @@ build:
   image: default-bionic
   environment:
     php:
-      version: 8.1
+      version: 8.2
   tests:
     override:
       - command: './vendor/bin/pest'

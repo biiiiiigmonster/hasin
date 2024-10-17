@@ -6,9 +6,9 @@ use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Illuminate\Database\Eloquent\Relations\HasOneOrManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -62,7 +62,7 @@ class RelationMixin
 
                 return $relation($query, $parentQuery, $columns);
             };
-            $hasManyThrough = function (Builder $query, Builder $parentQuery) use ($relation): Builder {
+            $hasOneOrManyThrough = function (Builder $query, Builder $parentQuery) use ($relation): Builder {
                 $columns = $this->getQualifiedFirstKeyName();
                 if ($parentQuery->getQuery()->from === $query->getQuery()->from) {
                     $query->from($query->getModel()->getTable().' as '.$hash = $this->getRelationCountHash());
@@ -132,7 +132,7 @@ class RelationMixin
                 $this instanceof BelongsTo => $belongsTo($query, $parentQuery),
                 $this instanceof BelongsToMany => $belongsToMany($query, $parentQuery),
                 $this instanceof HasOneOrMany => $hasOneOrMany($query, $parentQuery),
-                $this instanceof HasManyThrough => $hasManyThrough($query, $parentQuery),
+                $this instanceof HasOneOrManyThrough => $hasOneOrManyThrough($query, $parentQuery),
                 default => throw new LogicException(
                     sprintf('%s must be a relationship instance.', $this::class)
                 )
@@ -145,7 +145,7 @@ class RelationMixin
         return fn (): string => match (true) {
             $this instanceof BelongsTo => $this->getQualifiedForeignKeyName(),
             $this instanceof HasOneOrMany, $this instanceof BelongsToMany => $this->getQualifiedParentKeyName(),
-            $this instanceof HasManyThrough => $this->getQualifiedLocalKeyName(),
+            $this instanceof HasOneOrManyThrough => $this->getQualifiedLocalKeyName(),
             default => throw new LogicException(
                 sprintf('%s must be a relationship instance.', $this::class)
             )
