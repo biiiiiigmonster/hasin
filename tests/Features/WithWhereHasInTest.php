@@ -11,8 +11,8 @@ test('withWhereHasIn same as withWhereHas', function () {
         $query->where('votes', '>', 20);
     })->orderBy('id')->get();
 
-    expect($whereHas->pluck('id'))->toEqual($whereHasIn->pluck('id'));
-    expect($whereHas->pluck('posts.id'))->toEqual($whereHasIn->pluck('posts.id'));
+    expect($whereHas->pluck('id'))->toEqual($whereHasIn->pluck('id'))
+        ->and($whereHas->pluck('posts.id'))->toEqual($whereHasIn->pluck('posts.id'));
 });
 
 test('nested withWhereHasIn same as nested withWhereHas', function () {
@@ -23,7 +23,7 @@ test('nested withWhereHasIn same as nested withWhereHas', function () {
         $query->where('status', '>', 2);
     })->orderBy('id')->get();
 
-    expect($whereHas->pluck('id'))->toEqual($whereHasIn->pluck('id'));
-    expect($whereHas->pluck('posts.id'))->toEqual($whereHasIn->pluck('posts.id'));
-    expect($whereHas->pluck('posts.comments.id'))->toEqual($whereHasIn->pluck('posts.comments.id'));
+    expect($whereHas->pluck('id'))->toEqual($whereHasIn->pluck('id'))
+        ->and($whereHas->pluck('posts.id'))->toEqual($whereHasIn->pluck('posts.id'))
+        ->and($whereHas->pluck('posts.comments.id'))->toEqual($whereHasIn->pluck('posts.comments.id'));
 });
