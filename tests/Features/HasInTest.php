@@ -76,7 +76,7 @@ test('MorphToMany: hasIn same as has', function () {
     expect($has)->toEqual($hasIn);
 });
 
-test('HasMany: hasIn(gte 2) same as has(gte 2)', function () {
+test('hasIn(gte 2) same as has(gte 2)', function () {
     $has = User::has('posts', '>=', 2)->orderBy('id')->pluck('id');
     $hasIn = User::hasIn('posts', '>=', 2)->orderBy('id')->pluck('id');
 
