@@ -6,9 +6,10 @@ use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
-use Illuminate\Database\Eloquent\Relations\HasOneOrManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -132,7 +133,7 @@ class RelationMixin
                 $this instanceof BelongsTo => $belongsTo($query, $parentQuery),
                 $this instanceof BelongsToMany => $belongsToMany($query, $parentQuery),
                 $this instanceof HasOneOrMany => $hasOneOrMany($query, $parentQuery),
-                $this instanceof HasOneOrManyThrough => $hasOneOrManyThrough($query, $parentQuery),
+                $this instanceof HasOneThrough, $this instanceof HasManyThrough => $hasOneOrManyThrough($query, $parentQuery),
                 default => throw new LogicException(
                     sprintf('%s must be a relationship instance.', $this::class)
                 )
@@ -145,7 +146,7 @@ class RelationMixin
         return fn (): string => match (true) {
             $this instanceof BelongsTo => $this->getQualifiedForeignKeyName(),
             $this instanceof HasOneOrMany, $this instanceof BelongsToMany => $this->getQualifiedParentKeyName(),
-            $this instanceof HasOneOrManyThrough => $this->getQualifiedLocalKeyName(),
+            $this instanceof HasOneThrough, $this instanceof HasManyThrough => $this->getQualifiedLocalKeyName(),
             default => throw new LogicException(
                 sprintf('%s must be a relationship instance.', $this::class)
             )
