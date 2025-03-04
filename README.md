@@ -18,6 +18,7 @@ The `hasin` is composer package based on `where in` syntax to query the relation
 # Installation
 | Laravel Version | Install command                                     |
 |-----------------|-----------------------------------------------------|
+| Laravel 12      | ``` composer require biiiiiigmonster/hasin:^5.0 ``` |
 | Laravel 11      | ``` composer require biiiiiigmonster/hasin:^4.0 ``` |
 | Laravel 10      | ``` composer require biiiiiigmonster/hasin:^3.0 ``` |
 | Laravel 9       | ``` composer require biiiiiigmonster/hasin:^2.0 ``` |
@@ -35,7 +36,7 @@ User::has('posts')->get();
 #### `select * from users where exists (select * from posts where users.id = posts.user_id)`
 > 'exists' is a loop to the external table, and then queries the internal table (subQuery) every time. Because the index used for the query of the internal table (the internal table is efficient, so it can be used as a large table), and how much of the external table needs to be traversed, it is inevitable (try to use a small table), so the use of exists for the large internal table can speed up the efficiency.
 
-However, when the **User** has a large amount of data, there will be performance problems, so the **where in** syntax will greatly improve the performance.
+When the **User** table has a large amount of data, there will be performance problems, so the **where in** syntax will greatly improve the performance.
 
 #### `select * from users where users.id in (select posts.user_id from posts)`
 > 'in' is to hash connect the appearance and inner table, first query the inner table, then match the result of the inner table with the appearance, and use the index for the outer table (the appearance is efficient, and large tables can be used). Most of the inner tables need to be queried, which is inevitable. Therefore, using 'in' with large appearance can speed up the efficiency.
