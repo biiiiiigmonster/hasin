@@ -2,7 +2,12 @@
     "name": "biiiiiigmonster/hasin",
     "description": "Laravel framework relation has in implement",
     "type": "library",
-    "keywords": ["laravel", "orm", "relation", "whereHas"],
+    "keywords": [
+        "laravel",
+        "orm",
+        "relation",
+        "whereHas"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -11,13 +16,13 @@
         }
     ],
     "require": {
-        "laravel/framework": "^12"
+        "laravel/framework": "^12|^13.0"
     },
     "require-dev": {
         "laravel/pint": "^1.1",
-        "orchestra/testbench": "^10.0",
-        "pestphp/pest": "^3.0",
-        "pestphp/pest-plugin-laravel": "^3.0"
+        "orchestra/testbench": "^10.0|^11.0",
+        "pestphp/pest": "^3.0|^4.4",
+        "pestphp/pest-plugin-laravel": "^3.0|^4.1"
     },
     "autoload": {
         "psr-4": {
