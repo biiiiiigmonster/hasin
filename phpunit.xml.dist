@@ -12,7 +12,6 @@
     failOnRisky="true"
     failOnEmptyTestSuite="true"
     beStrictAboutOutputDuringTests="true"
-    convertDeprecationsToExceptions="false"
     cacheDirectory=".phpunit.cache"
     backupStaticProperties="false"
 >
@@ -22,15 +21,17 @@
         </testsuite>
     </testsuites>
     <coverage>
-        <include>
-            <directory suffix=".php">./src</directory>
-        </include>
         <report>
             <html outputDirectory="build/coverage"/>
             <text outputFile="build/coverage.txt"/>
             <clover outputFile="build/logs/clover.xml"/>
         </report>
     </coverage>
+    <source>
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+    </source>
     <logging>
         <junit outputFile="build/report.junit.xml"/>
     </logging>
