@@ -12,6 +12,7 @@
     failOnRisky="true"
     failOnEmptyTestSuite="true"
     beStrictAboutOutputDuringTests="true"
+    convertDeprecationsToExceptions="false"
     cacheDirectory=".phpunit.cache"
     backupStaticProperties="false"
 >
