@@ -2,13 +2,16 @@ name: run-tests
 
 on:
   push:
-    branches: [laravel-v12]
+    branches:
+      - laravel-v12
   pull_request:
-    branches: [laravel-v12]
+    branches:
+      - laravel-v12
 
 jobs:
   test:
     runs-on: ${{ matrix.os }}
+
     services:
       mysql:
         image: mysql:5.7
@@ -18,16 +21,22 @@ jobs:
         ports:
           - 33306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     strategy:
       fail-fast: true
       matrix:
         os: [ubuntu-latest]
         php: [8.2, 8.3, 8.4]
-        laravel: [12.*]
+        laravel: ['12.*', '13.*']
         stability: [prefer-lowest, prefer-stable]
         include:
           - laravel: 12.*
             testbench: 10.*
+          - laravel: 13.*
+            testbench: 11.*
+        exclude:
+          - laravel: 13.*
+            php: 8.2
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
