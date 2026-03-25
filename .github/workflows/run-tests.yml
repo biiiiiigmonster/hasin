@@ -3,10 +3,10 @@ name: run-tests
 on:
   push:
     branches:
-      - laravel-v12
+      - master
   pull_request:
     branches:
-      - laravel-v12
+      - master
 
 jobs:
   test:
